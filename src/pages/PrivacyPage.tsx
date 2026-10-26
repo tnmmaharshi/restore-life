@@ -9,7 +9,10 @@ import {
   FileText, 
   Globe, 
   Printer, 
-  LogIn 
+  LogIn,
+  Activity,
+  CheckCircle2,
+  Mail
 } from 'lucide-react';
 
 interface PrivacyPageProps {
@@ -19,7 +22,7 @@ interface PrivacyPageProps {
 export const PrivacyPage: React.FC<PrivacyPageProps> = ({ onNavigate }) => {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-10 pb-24">
-      {/* Sub-header navigation row */}
+      {/* Sub-header navigation row matching Screenshot 1 */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200/80 pb-5 text-xs font-medium text-slate-500">
         <button
           onClick={() => {
@@ -90,113 +93,185 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      <div className="luxury-card rounded-3xl p-8 sm:p-12 space-y-8">
-        <div className="space-y-3">
+      {/* Main Document Card */}
+      <div className="luxury-card rounded-3xl p-8 sm:p-12 space-y-8 bg-white">
+        
+        {/* Document Header */}
+        <div className="space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#e8f4f8] text-[#004b70] text-xs font-semibold">
-            <ShieldCheck className="w-3.5 h-3.5" /> Patient Data Protection
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>Official Document</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-normal text-[#0f2027] font-serif-display tracking-tight">
+
+          <h1 className="text-4xl sm:text-5xl font-normal text-[#0a1922] font-serif-display tracking-tight">
             Privacy Policy
           </h1>
-          <p className="text-xs text-slate-400">
-            Effective Date: October 2026 • Last Updated: October 16, 2026 • Version: 1.0.0
+
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+            At RestoreLife, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application.
           </p>
+
+          <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 pt-2 border-b border-slate-100 pb-5">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-slate-700 font-semibold">Effective Date: October 2026</span>
+            <span>•</span>
+            <span>Last Updated: August 11, 2026</span>
+            <span>•</span>
+            <span>Version: 1.0.0</span>
+          </div>
         </div>
 
-        {/* 3 Trust Highlight Cards */}
+        {/* Highlight Trust Badges */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+          <div className="p-5 rounded-2xl bg-[#f8fafc] border border-slate-200/80 space-y-2">
             <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-[#004b70] shadow-2xs">
               <Lock className="w-5 h-5" />
             </div>
-            <h3 className="text-sm font-bold text-[#0f2027]">Confidentiality First</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              We treat personal health data with clinical confidentiality. We never sell, rent, or monetize your records.
+            <h3 className="text-xs font-bold text-[#0a1922]">No Selling of Health Data</h3>
+            <p className="text-[11px] text-slate-500 leading-relaxed">
+              We never sell or rent your personal health data to third parties for advertising or marketing.
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+          <div className="p-5 rounded-2xl bg-[#f8fafc] border border-slate-200/80 space-y-2">
+            <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-[#004b70] shadow-2xs">
+              <Activity className="w-5 h-5" />
+            </div>
+            <h3 className="text-xs font-bold text-[#0a1922]">OS Health App Integration</h3>
+            <p className="text-[11px] text-slate-500 leading-relaxed">
+              Apple Health &amp; Health Connect access is restricted strictly to the explicit permission scope you grant.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-[#f8fafc] border border-slate-200/80 space-y-2">
             <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-[#004b70] shadow-2xs">
               <Database className="w-5 h-5" />
             </div>
-            <h3 className="text-sm font-bold text-[#0f2027]">Encrypted Infrastructure</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              All intake forms, questionnaires, and lab biomarkers are encrypted in transit (TLS 1.3) and at rest (AES-256).
-            </p>
-          </div>
-
-          <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-            <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-[#004b70] shadow-2xs">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <h3 className="text-sm font-bold text-[#0f2027]">Clinical Governance</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Access is strictly restricted to your assigned clinical dietitian and care coordinator under NDA.
+            <h3 className="text-xs font-bold text-[#0a1922]">Secure Cloud Architecture</h3>
+            <p className="text-[11px] text-slate-500 leading-relaxed">
+              Cloud services (such as Supabase, Firebase) host data under rigorous data-protection agreements.
             </p>
           </div>
         </div>
 
-        {/* Policy Body */}
-        <div className="space-y-8 text-xs sm:text-sm text-slate-600 leading-relaxed">
-          <section className="space-y-2">
-            <h3 className="text-lg font-normal text-[#0f2027] font-serif-display">
-              1. Introduction
-            </h3>
+        {/* Policy Sections matching user text exactly */}
+        <div className="space-y-8 text-xs sm:text-sm text-slate-700 leading-relaxed pt-2">
+          
+          {/* Section 1 */}
+          <section className="space-y-3">
+            <h2 className="text-lg font-bold text-[#0a1922] font-serif-display">
+              1. Information We Collect
+            </h2>
             <p>
-              RestoreLife Technologies Private Limited (“RestoreLife”, “we”, “our”, or “us”) operates this website and the RestoreLife clinical nutrition management platform.
+              We collect information that you provide directly to us when registering an account, creating your health profile, and communicating with our team.
             </p>
-            <p>
-              This Privacy Policy explains how we collect, store, safeguard, and use your personal information and health metrics when you submit an onboarding request, engage with our dietitians, or use our digital coaching tools.
-            </p>
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2.5">
+              <div className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-[#004b70] shrink-0 mt-0.5" />
+                <p>
+                  <strong>Personal Information:</strong> Name, email address, phone number, date of birth, gender.
+                </p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-[#004b70] shrink-0 mt-0.5" />
+                <p>
+                  <strong>Health &amp; Fitness Data:</strong> Weight, height, health goals, meal logs, physical activity, and sync metrics (such as steps, calories burned, and sleep duration) from Apple Health or Health Connect when authorized.
+                </p>
+              </div>
+            </div>
           </section>
 
-          <section className="space-y-2">
-            <h3 className="text-lg font-normal text-[#0f2027] font-serif-display">
-              2. Information We Collect
-            </h3>
-            <p>To provide tailored clinical nutrition plans, we collect:</p>
+          {/* Section 2 */}
+          <section className="space-y-3">
+            <h2 className="text-lg font-bold text-[#0a1922] font-serif-display">
+              2. How We Use Your Information
+            </h2>
+            <p>
+              We use the collected information for various purposes to support your health journey:
+            </p>
             <ul className="list-disc pl-5 space-y-1.5 text-slate-600">
-              <li><strong>Contact Information:</strong> First and last name, email address, phone number, and city/country.</li>
-              <li><strong>Health &amp; Dietary Metrics:</strong> Self-reported primary health focus, dietary preferences (vegetarian, vegan, non-vegetarian), existing health conditions, and optional notes.</li>
-              <li><strong>Biomarker &amp; Consultation Records:</strong> Voluntary blood biomarker results (HbA1c, lipid profile, fasting glucose) uploaded for dietitian review and progress tracking.</li>
+              <li>To personalize your coaching, meal planning, and nutrition guidelines.</li>
+              <li>To monitor progress and offer health insights.</li>
+              <li>To communicate app updates, reminders, and feedback.</li>
+              <li>To improve the application functionality and user experience.</li>
             </ul>
           </section>
 
-          <section className="space-y-2">
-            <h3 className="text-lg font-normal text-[#0f2027] font-serif-display">
-              3. How We Use Your Data
-            </h3>
+          {/* Section 3 */}
+          <section className="space-y-3">
+            <h2 className="text-lg font-bold text-[#0a1922] font-serif-display">
+              3. Data Sharing &amp; Disclosure
+            </h2>
             <p>
-              Your data is utilized solely for:
+              We do not sell or rent your personal health data to third parties. We may share information with:
             </p>
-            <ul className="list-disc pl-5 space-y-1 text-slate-600">
-              <li>Coordinating clinical onboarding and assigning an accredited dietitian</li>
-              <li>Formulating evidence-based personalized nutrition recommendations</li>
-              <li>Providing appointment reminders and mobile app authentication</li>
-              <li>Continuous quality assurance and clinical oversight</li>
+            <ul className="list-disc pl-5 space-y-2 text-slate-600">
+              <li>
+                <strong>Our Coaching Staff:</strong> Certified nutrition coaches who review your logs to provide guidance.
+              </li>
+              <li>
+                <strong>Service Providers:</strong> Secure third-party cloud infrastructure (such as Supabase, Firebase) that hosts our services under strict data-protection contracts.
+              </li>
             </ul>
           </section>
 
-          <section className="space-y-2">
-            <h3 className="text-lg font-normal text-[#0f2027] font-serif-display">
-              4. Data Retention &amp; Your Rights
-            </h3>
+          {/* Section 4 */}
+          <section className="space-y-3">
+            <h2 className="text-lg font-bold text-[#0a1922] font-serif-display">
+              4. Data Security
+            </h2>
             <p>
-              You maintain the right to review, update, or request the deletion of your personal records at any time. We retain client records in compliance with applicable Indian digital healthcare standards (DISHA and DPDP Act).
+              We implement robust administrative, technical, and physical security measures to protect your health and personal data. While we take maximum precautions, no online transmission or data storage is completely secure, and we cannot guarantee absolute security.
             </p>
           </section>
 
-          <section className="space-y-2">
-            <h3 className="text-lg font-normal text-[#0f2027] font-serif-display">
-              5. Grievance Desk
-            </h3>
+          {/* Section 5 */}
+          <section className="space-y-3">
+            <h2 className="text-lg font-bold text-[#0a1922] font-serif-display">
+              5. Health App Integration (Apple Health / Health Connect)
+            </h2>
             <p>
-              For privacy inquiries, data access requests, or regulatory questions, contact our Data Protection Officer at:
-            </p>
-            <p className="font-semibold text-slate-800">
-              Email: <a href="mailto:support@restorelife.co.in" className="text-[#004b70] underline">support@restorelife.co.in</a> or <a href="mailto:priya@restorelife.co.in" className="text-[#004b70] underline">priya@restorelife.co.in</a>
+              If you enable synchronization with OS health integrations, our access to your health metrics will be strictly restricted to the permission scope you choose. We only use this information to calculate your progress and do not utilize it for marketing or advertising purposes.
             </p>
           </section>
+
+          {/* Section 6 */}
+          <section className="space-y-3">
+            <h2 className="text-lg font-bold text-[#0a1922] font-serif-display">
+              6. Your Rights &amp; Choices
+            </h2>
+            <p>
+              You can access, correct, or delete your account information at any time. You can also manage permissions for device settings, health sync, and notifications directly from your device's operating system settings.
+            </p>
+          </section>
+
+          {/* Section 7 */}
+          <section className="space-y-3 pt-2 border-t border-slate-100">
+            <h2 className="text-lg font-bold text-[#0a1922] font-serif-display">
+              7. Contact Us
+            </h2>
+            <p>
+              If you have any questions or feedback about this Privacy Policy, please contact our support team at:
+            </p>
+            <div className="p-4 rounded-2xl bg-[#e8f4f8] border border-[#004b70]/20 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Mail className="w-4 h-4 text-[#004b70]" />
+                <a 
+                  href="mailto:support@restorelife.co.in" 
+                  className="font-bold text-[#004b70] hover:underline text-sm"
+                >
+                  support@restorelife.co.in
+                </a>
+              </div>
+              <button
+                onClick={() => onNavigate('support')}
+                className="text-xs font-semibold text-[#004b70] hover:underline cursor-pointer"
+              >
+                Visit Support Desk →
+              </button>
+            </div>
+          </section>
+
         </div>
       </div>
     </div>

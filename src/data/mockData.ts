@@ -1,155 +1,133 @@
 import { HealthGoalOption } from '../types';
 
 export const HEALTH_GOALS: HealthGoalOption[] = [
-  { value: 'diabetes-reversal', label: 'Type 2 Diabetes & Pre-Diabetes (HbA1c Reversal)' },
-  { value: 'weight-management', label: 'Metabolic Reset & Visceral Fat Reduction' },
-  { value: 'pcos-pcod', label: 'PCOS / PCOD & Hormonal Balance' },
-  { value: 'fatty-liver-lipids', label: 'Fatty Liver (NAFLD) & Lipid Optimization (ApoB/Triglycerides)' },
-  { value: 'gut-health', label: 'Gut Health, IBS & Microbiome Restoration' },
-  { value: 'thyroid-autoimmune', label: 'Thyroid Health (Hashimoto’s / Hypothyroidism)' },
-  { value: 'athletic-longevity', label: 'Sports Nutrition, Muscle Mass & Preventive Longevity' },
+  { value: 'diabetes-reversal', label: 'Diabetes or high blood sugar' },
+  { value: 'weight-management', label: 'Healthy weight loss' },
+  { value: 'pcos-pcod', label: 'PCOS / PCOD and hormones' },
+  { value: 'fatty-liver-lipids', label: 'Fatty liver or high cholesterol' },
+  { value: 'gut-health', label: 'Gut health, bloating or IBS' },
+  { value: 'thyroid-autoimmune', label: 'Thyroid health' },
+  { value: 'athletic-longevity', label: 'Fitness, strength and healthy ageing' },
 ];
 
 export const PREFERRED_MODES = [
-  { value: 'email', label: 'Email Communication' },
-  { value: 'phone', label: 'Direct Phone Call' },
-  { value: 'video', label: 'Telehealth Video Consultation' },
-];
+  { value: 'email', label: 'Email' },
+  { value: 'phone', label: 'Phone call' },
+  { value: 'video', label: 'Video call' },
+] as const;
 
 export interface ClinicalCondition {
   id: string;
+  goal: string;
   title: string;
-  tagline: string;
-  biomarkers: string[];
-  protocol: string;
-  badge: string;
+  description: string;
+  checks: string;
 }
 
 export const CLINICAL_CONDITIONS: ClinicalCondition[] = [
   {
     id: 'diabetes',
-    title: 'Type 2 Diabetes & Pre-Diabetes',
-    tagline: 'Restore cellular insulin sensitivity and bring HbA1c back to healthy ranges through targeted glycemic management.',
-    biomarkers: ['HbA1c', 'Fasting Blood Sugar', 'Fasting Insulin', 'HOMA-IR'],
-    protocol: 'Low-glycemic variability protocol with continuous glucose monitoring (CGM) analysis.',
-    badge: 'High Reversal Rate',
+    goal: 'diabetes-reversal',
+    title: 'Diabetes & blood sugar',
+    description: 'Bring your blood sugar into a healthy range with meals that keep you full and steady through the day.',
+    checks: 'HbA1c and fasting sugar',
+  },
+  {
+    id: 'weight',
+    goal: 'weight-management',
+    title: 'Healthy weight loss',
+    description: 'Lose weight at a steady pace without crash diets, and keep it off with habits that fit your life.',
+    checks: 'Weight and waist size',
   },
   {
     id: 'pcos',
-    title: 'PCOS & Hormonal Health',
-    tagline: 'Balance androgens, regulate menstrual cycles, and resolve persistent weight plateaus through cycle-synced nutrition.',
-    biomarkers: ['LH/FSH Ratio', 'Free Testosterone', 'AMH', 'DHEA-S'],
-    protocol: 'Anti-inflammatory hormonal balance diet with micronutrient replenishment.',
-    badge: 'Specialized Care',
+    goal: 'pcos-pcod',
+    title: 'PCOS & hormones',
+    description: 'Support regular cycles, more energy and easier weight control with food that suits your body.',
+    checks: 'Cycle length and hormone tests',
   },
   {
     id: 'fatty-liver',
-    title: 'Fatty Liver & Dyslipidemia',
-    tagline: 'Reverse non-alcoholic fatty liver disease (NAFLD) and optimize lipid fractions beyond standard cholesterol tests.',
-    biomarkers: ['ALT / AST Liver Enzymes', 'ApoB', 'Triglycerides', 'hs-CRP'],
-    protocol: 'Hepatic-fat clearing dietary therapy and mitochondrial antioxidant support.',
-    badge: 'Cardiometabolic',
+    goal: 'fatty-liver-lipids',
+    title: 'Fatty liver & cholesterol',
+    description: 'Lower liver fat and improve your cholesterol with simple changes to what and when you eat.',
+    checks: 'Liver tests and cholesterol',
   },
   {
     id: 'gut-health',
-    title: 'Gut Health, IBS & Microbiome',
-    tagline: 'Heal gut dysbiosis, eliminate bloating, and restore mucosal integrity with medical elimination and reintroduction protocols.',
-    biomarkers: ['Zonulin', 'Calprotectin', 'SIBO Breath Screen', 'Food Intolerances'],
-    protocol: 'Phased 4R gut restoration: Remove, Replace, Reinoculate, and Repair.',
-    badge: 'Microbiome First',
+    goal: 'gut-health',
+    title: 'Gut health',
+    description: 'Find the foods that trigger bloating or discomfort, and build a calm, comfortable gut step by step.',
+    checks: 'Symptoms and food reactions',
   },
   {
     id: 'thyroid',
-    title: 'Thyroid & Metabolic Sluggishness',
-    tagline: 'Support active T3 conversion, curb autoimmune antibodies in Hashimoto’s, and revitalize sluggish metabolic rate.',
-    biomarkers: ['Free T3 / Free T4', 'TSH', 'Anti-TPO Antibodies', 'Ferritin'],
-    protocol: 'Nutrient-dense thyroid protocol with selenium, zinc, and elimination of inflammatory triggers.',
-    badge: 'Endocrine Care',
-  },
-  {
-    id: 'longevity',
-    title: 'Longevity & Performance',
-    tagline: 'Optimize lean muscle preservation, enhance metabolic flexibility, and minimize biological aging markers.',
-    biomarkers: ['VO2 Max Nutrition', 'Visceral Fat Index', 'Homocysteine', 'Lipoprotein(a)'],
-    protocol: 'Precision protein distribution, intermittent fasting windows, and zone-2 metabolic fueling.',
-    badge: 'Preventive Health',
+    goal: 'thyroid-autoimmune',
+    title: 'Thyroid health',
+    description: 'Eat in a way that supports your thyroid, helps with tiredness and works alongside your medicine.',
+    checks: 'TSH and thyroid levels',
   },
 ];
 
-export const CLIENT_RESULTS = [
+export interface ClientStory {
+  name: string;
+  city: string;
+  focus: string;
+  duration: string;
+  result: { label: string; before: string; after: string };
+  quote: string;
+}
+
+export const CLIENT_RESULTS: ClientStory[] = [
   {
-    name: 'Vikramaditya S.',
-    age: 44,
+    name: 'Vikram S.',
     city: 'Bengaluru',
-    condition: 'Pre-Diabetes & Metabolic Syndrome',
-    duration: '16 Weeks',
-    category: 'Diabetes & Glucose',
-    hba1c: { before: '8.4%', after: '5.5%' },
-    weight: { before: '92.4 kg', after: '81.2 kg' },
-    extraMetric: { label: 'Fasting Insulin', before: '24.8 uIU', after: '8.2 uIU' },
-    quote: 'My physician was ready to put me on daily medication. Within 16 weeks of RestoreLife clinical nutrition therapy, my HbA1c normalized to 5.5% without drugs.',
+    focus: 'High blood sugar',
+    duration: '16 weeks',
+    result: { label: 'HbA1c', before: '8.4%', after: '5.5%' },
+    quote: 'I was close to starting daily medicine. The plan was simple to follow, and my sugar levels came back to normal.',
   },
   {
-    name: 'Priya Narayanan',
-    age: 31,
+    name: 'Priya N.',
     city: 'Mumbai',
-    condition: 'PCOS & Chronic Fatigue',
-    duration: '12 Weeks',
-    category: 'PCOS & Hormones',
-    hba1c: { before: 'Cycle 65d', after: 'Stable 30d' },
-    weight: { before: '72.0 kg', after: '61.5 kg' },
-    extraMetric: { label: 'AMH Level', before: '8.4 ng/mL', after: '3.6 ng/mL' },
-    quote: 'After 5 years of extreme restrictive diets that caused severe cortisol spikes, RestoreLife gave me a cycle-synced nutrition plan that actually worked.',
+    focus: 'PCOS',
+    duration: '12 weeks',
+    result: { label: 'Weight', before: '72 kg', after: '61.5 kg' },
+    quote: 'After years of strict diets, this was the first plan that felt normal. My cycles are regular again.',
   },
   {
-    name: 'Dr. Rohan Mehra',
-    age: 48,
+    name: 'Rohan M.',
     city: 'New Delhi',
-    condition: 'Fatty Liver (Grade 2) & High ApoB',
-    duration: '14 Weeks',
-    category: 'Liver & Lipids',
-    hba1c: { before: 'Grade 2', after: 'Normal Liver' },
-    weight: { before: 'Trig: 280 mg/dL', after: 'Trig: 112 mg/dL' },
-    extraMetric: { label: 'ApoB', before: '142 mg/dL', after: '74 mg/dL' },
-    quote: 'As an orthopedic surgeon with irregular hospital hours, I needed a science-backed protocol. RestoreLife tailored my meals around my surgery schedules.',
-  },
-  {
-    name: 'Ananya Deshmukh',
-    age: 39,
-    city: 'Pune',
-    condition: 'Hashimoto’s & Chronic Gut Dysbiosis',
-    duration: '18 Weeks',
-    category: 'Gut & Thyroid',
-    hba1c: { before: 'Anti-TPO > 400', after: 'Anti-TPO 62' },
-    weight: { before: 'Severe Bloat', after: 'Zero Flare-ups' },
-    extraMetric: { label: 'TSH', before: '6.8 mIU/L', after: '2.1 mIU/L' },
-    quote: 'The elimination protocol identified food intolerances no one had checked before. My gut inflammation resolved and my thyroid antibodies plummeted.',
+    focus: 'Fatty liver',
+    duration: '14 weeks',
+    result: { label: 'Triglycerides', before: '280', after: '112' },
+    quote: 'I work long, irregular hours. My dietitian planned meals around my schedule, not the other way round.',
   },
 ];
 
 export const FAQS = [
   {
-    question: 'Who can join RestoreLife?',
-    answer: 'RestoreLife is open to any adult looking to reverse metabolic conditions, balance blood biomarkers, manage body composition, or improve digestive and hormonal health under the direct guidance of certified clinical dietitians and medical nutritionists.',
+    question: 'Who is RestoreLife for?',
+    answer: 'Any adult who wants to improve their health through food — whether you have a condition like diabetes, PCOS or fatty liver, or simply want to eat better and feel more energetic.',
   },
   {
-    question: 'Why does account activation require clinical onboarding?',
-    answer: 'Unlike generic fitness apps that push generic calorie plans, RestoreLife delivers clinical medical nutrition therapy. Every plan is handcrafted around your blood biomarkers, medical history, dietary preferences, and allergies. Our clinical care team validates your health intake before assigning a dedicated dietitian and publishing your protocol to your mobile app.',
+    question: 'What happens after I fill in the form?',
+    answer: 'Someone from our team will contact you within 24 hours on your chosen channel. They will answer your questions and book your first call with a dietitian.',
   },
   {
-    question: 'How quickly will our team reach out?',
-    answer: 'Our dedicated clinical care coordinator will contact you via WhatsApp, email, or direct phone call within 24 business hours to confirm your details, answer initial questions, and schedule your comprehensive 1-on-1 intake video consultation.',
+    question: 'Do I need blood test reports to start?',
+    answer: 'No. If you have recent reports from the last 3–6 months, please share them. If not, your dietitian will tell you which simple tests are useful.',
   },
   {
-    question: 'What do I get inside the RestoreLife mobile app once enrolled?',
-    answer: 'Your mobile portal gives you dynamic weekly clinical meal plans, tailored macronutrient breakdowns, a clinical recipe library, biomarker tracking graphs, hydration & habit logs, and direct daily chat with your dedicated dietitian.',
+    question: 'What do I get in the app?',
+    answer: 'Your weekly meal plan, easy recipes, a place to track your progress, and chat with your dietitian whenever you need help.',
   },
   {
-    question: 'Can RestoreLife collaborate with my primary doctor or physician?',
-    answer: 'Yes. Our dietitians are clinical practitioners who frequently collaborate with clients’ endocrinologists, cardiologists, and physicians. We provide structured biomarker progress reports and consult summaries that you can share with your doctor during check-ups.',
+    question: 'Can I keep seeing my own doctor?',
+    answer: 'Yes, and we encourage it. We work alongside your doctor and can share progress reports for your check-ups. Please never change your medicine without your doctor’s advice.',
   },
   {
-    question: 'Are blood tests required before starting?',
-    answer: 'While existing blood tests from the past 3–6 months are welcome, they are not mandatory to request onboarding. If you need updated blood work, our clinical team can guide you on the specific metabolic panel (HbA1c, Lipid Profile, Liver Function, Thyroid, etc.) to get tested with your local lab.',
+    question: 'Will I have to give up the food I like?',
+    answer: 'No. Your plan is built around your usual meals, culture and taste. We make small, practical changes rather than asking you to start from scratch.',
   },
 ];

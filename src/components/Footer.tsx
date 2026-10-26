@@ -36,25 +36,21 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             >
               <img 
                 src={logoImg} 
-                alt="RestoreLife Clinical Nutrition" 
+                alt="RestoreLife" 
                 className="h-9 w-auto object-contain opacity-95 hover:opacity-100 transition-opacity" 
               />
             </div>
 
             <p className="text-sm text-slate-500 max-w-sm leading-relaxed">
-              RestoreLife connects individuals with licensed clinical dietitians to reverse metabolic conditions, balance biomarkers, and optimize longevity through evidence-based medical nutrition therapy.
+              Personal nutrition care from qualified dietitians. Simple food plans, built around your health and your life.
             </p>
 
-            <div className="flex items-center gap-2 text-xs font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200/60 px-3 py-1.5 rounded-xl w-fit">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Dedicated Clinical Care Desk Active</span>
-            </div>
           </div>
 
           {/* Column 1: Protocols & Specialties */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
-              Specialties
+              We Help With
             </h4>
             <ul className="space-y-2 text-xs font-medium text-slate-600">
               <li>
@@ -62,7 +58,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   onClick={() => handleSectionScroll('specialties')} 
                   className="hover:text-[#004b70] transition-colors cursor-pointer text-left"
                 >
-                  Diabetes &amp; Pre-Diabetes
+                  Diabetes &amp; Blood Sugar
                 </button>
               </li>
               <li>
@@ -70,7 +66,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   onClick={() => handleSectionScroll('specialties')} 
                   className="hover:text-[#004b70] transition-colors cursor-pointer text-left"
                 >
-                  PCOS &amp; Hormonal Balance
+                  PCOS &amp; Hormones
                 </button>
               </li>
               <li>
@@ -78,7 +74,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   onClick={() => handleSectionScroll('specialties')} 
                   className="hover:text-[#004b70] transition-colors cursor-pointer text-left"
                 >
-                  Fatty Liver &amp; Dyslipidemia
+                  Fatty Liver &amp; Cholesterol
                 </button>
               </li>
               <li>
@@ -86,7 +82,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   onClick={() => handleSectionScroll('specialties')} 
                   className="hover:text-[#004b70] transition-colors cursor-pointer text-left"
                 >
-                  Gut Health &amp; IBS
+                  Gut Health
                 </button>
               </li>
               <li>
@@ -94,7 +90,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   onClick={() => handleSectionScroll('specialties')} 
                   className="hover:text-[#004b70] transition-colors cursor-pointer text-left"
                 >
-                  Longevity &amp; Preventive Care
+                  Thyroid Health
                 </button>
               </li>
             </ul>
@@ -103,7 +99,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Column 2: Client Journey */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
-              Platform
+              RestoreLife
             </h4>
             <ul className="space-y-2 text-xs font-medium text-slate-600">
               <li>
@@ -111,7 +107,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   onClick={() => handleSectionScroll('how-it-works')} 
                   className="hover:text-[#004b70] transition-colors cursor-pointer"
                 >
-                  How Becoming a Client Works
+                  How It Works
                 </button>
               </li>
               <li>
@@ -119,7 +115,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   onClick={() => handleSectionScroll('results')} 
                   className="hover:text-[#004b70] transition-colors cursor-pointer"
                 >
-                  Biomarker Outcomes
+                  Client Stories
                 </button>
               </li>
               <li>
@@ -127,7 +123,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   onClick={() => handleSectionScroll('faq')} 
                   className="hover:text-[#004b70] transition-colors cursor-pointer"
                 >
-                  Frequently Asked Questions
+                  FAQ
                 </button>
               </li>
               <li>
@@ -135,7 +131,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   onClick={() => handleSectionScroll('onboarding-form')} 
                   className="hover:text-[#004b70] transition-colors cursor-pointer flex items-center gap-1 text-[#004b70] font-semibold"
                 >
-                  <span>Request Onboarding</span>
+                  <span>Book a Free Call</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
                 </button>
               </li>
@@ -145,7 +141,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Column 3: Governance & Support */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
-              Care &amp; Legal
+              Help &amp; Legal
             </h4>
             <ul className="space-y-2 text-xs font-medium text-slate-600">
               <li>
@@ -157,7 +153,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   className="hover:text-[#004b70] transition-colors cursor-pointer flex items-center gap-1.5"
                 >
                   <Mail className="w-3.5 h-3.5 text-slate-400" />
-                  <span>Help &amp; Support Desk</span>
+                  <span>Help &amp; Support</span>
                 </button>
               </li>
               <li>
@@ -194,7 +190,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-500 leading-relaxed flex items-start gap-3">
           <ShieldAlert className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
           <p>
-            <strong>Healthcare Disclaimer:</strong> RestoreLife provides medical nutrition therapy and lifestyle coaching supervised by accredited clinical nutritionists. Our services do not constitute hospital emergency response, acute psychiatric care, or direct drug prescribing. Always consult your attending physician regarding changes to prescription medical therapy.
+            <strong className="text-slate-600">Please note:</strong> RestoreLife offers nutrition and lifestyle guidance from qualified dietitians. We are not an emergency service and do not prescribe medicine. Always talk to your doctor before changing any medication.
           </p>
         </div>
 
@@ -203,13 +199,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <p>
             © {currentYear} RestoreLife Technologies Private Limited. All rights reserved.
           </p>
-          <div className="flex items-center gap-4 text-[11px] text-slate-400">
-            <span>DISHA Healthcare Compliant</span>
-            <span>•</span>
-            <span>DPDP Act Ready</span>
-            <span>•</span>
-            <span>TLS 1.3 Encrypted</span>
-          </div>
+          <p className="text-[11px] text-slate-400">Made with care in India</p>
         </div>
       </div>
     </footer>
