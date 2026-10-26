@@ -11,9 +11,39 @@ export const HEALTH_GOALS: HealthGoalOption[] = [
 ];
 
 export const PREFERRED_MODES = [
-  { value: 'email', label: 'Email' },
-  { value: 'phone', label: 'Phone Call' },
-  { value: 'video', label: 'Video Call' },
+  { value: 'email', label: 'Email Communication' },
+  { value: 'phone', label: 'Direct Phone Call' },
+  { value: 'video', label: 'Telehealth Video Consultation' },
+];
+
+export const CLIENT_RESULTS = [
+  {
+    name: 'Vikramaditya S.',
+    age: 44,
+    condition: 'Pre-Diabetes & Metabolic Syndrome',
+    duration: '16 Weeks',
+    hba1c: { before: '6.8%', after: '5.4%' },
+    weight: { before: '92.4 kg', after: '81.2 kg' },
+    quote: 'My physician was ready to start me on lifelong medication. Within 16 weeks of RestoreLife medical nutrition therapy, my HbA1c dropped to 5.4% without any drugs.',
+  },
+  {
+    name: 'Priya Narayanan',
+    age: 31,
+    condition: 'PCOS & Chronic Fatigue',
+    duration: '12 Weeks',
+    hba1c: { before: 'Irregular (60d)', after: 'Stable 30d Cycle' },
+    weight: { before: '74 cm waist', after: '64 cm waist' },
+    quote: 'After 5 years of extreme restrictive diets that made my cortisol spike, RestoreLife balanced my hormones with cycle-synced clinical nutrition.',
+  },
+  {
+    name: 'Dr. Rohan Mehra',
+    age: 38,
+    condition: 'Hypertension & High ApoB',
+    duration: '14 Weeks',
+    hba1c: { before: '138 mg/dL', after: '72 mg/dL ApoB' },
+    weight: { before: '144/92 mmHg', after: '118/76 mmHg BP' },
+    quote: 'As an orthopedic surgeon, my schedule is hectic. RestoreLife designed meals I could eat between surgeries. My lipid profile is the best it has been since residency.',
+  },
 ];
 
 export const FAQS = [
