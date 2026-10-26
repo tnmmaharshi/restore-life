@@ -20,7 +20,6 @@ import {
   ShieldCheck, 
   TrendingDown, 
   TrendingUp, 
-  Calculator, 
   ChevronDown, 
   ChevronUp, 
   Clock, 
@@ -88,11 +87,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 </button>
 
                 <button
-                  onClick={() => onNavigate('calculator')}
+                  onClick={() => onNavigate('programs')}
                   className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-base border border-slate-200 shadow-sm hover:shadow transition-all flex items-center justify-center gap-2"
                 >
-                  <Calculator className="w-5 h-5 text-emerald-600" />
-                  <span>Free Biomarker & Macro Tool</span>
+                  <Sparkles className="w-5 h-5 text-emerald-600" />
+                  <span>Explore Clinical Tracks</span>
                 </button>
               </div>
 
@@ -421,11 +420,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   <ArrowRight className="w-4 h-4" />
                 </button>
                 <button
-                  onClick={() => onNavigate('calculator')}
+                  onClick={() => onNavigate('programs')}
                   className="w-full py-3.5 px-6 rounded-xl bg-white/10 hover:bg-white/15 text-white font-semibold text-sm transition-all flex items-center justify-center gap-2"
                 >
-                  <Calculator className="w-4 h-4 text-emerald-400" />
-                  <span>Calculate Calories & Macros</span>
+                  <Sparkles className="w-4 h-4 text-emerald-400" />
+                  <span>View Program Curriculum</span>
                 </button>
               </div>
             </div>
@@ -828,11 +827,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
-              onClick={() => onNavigate('calculator')}
+              onClick={() => onNavigate('programs')}
               className="w-full sm:w-auto px-6 py-4 rounded-xl bg-white/10 hover:bg-white/15 text-white font-semibold text-sm border border-white/20 transition-all flex items-center justify-center gap-2"
             >
-              <Calculator className="w-4 h-4 text-emerald-400" />
-              <span>Free Health Calculator</span>
+              <Sparkles className="w-4 h-4 text-emerald-400" />
+              <span>Explore All Programs</span>
             </button>
           </div>
         </div>

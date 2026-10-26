@@ -139,10 +139,10 @@ export const ProgramsPage: React.FC<ProgramsPageProps> = ({ onNavigate, onSelect
               </button>
 
               <button
-                onClick={() => onNavigate('calculator')}
+                onClick={() => onNavigate('recipes')}
                 className="w-full py-3 px-4 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors"
               >
-                Calculate Daily Targets First
+                Explore Clinical Recipes
               </button>
             </div>
 

@@ -445,11 +445,11 @@ export const GetStartedPage: React.FC<GetStartedPageProps> = ({ onNavigate, pref
               <button
                 onClick={() => {
                   setIsSubmitted(false);
-                  onNavigate('calculator');
+                  onNavigate('programs');
                 }}
                 className="flex-1 py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs transition-colors"
               >
-                Explore Health Calculator
+                Explore Clinical Programs
               </button>
               <button
                 onClick={() => {

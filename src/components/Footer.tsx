@@ -39,10 +39,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <button
-              onClick={() => handleNav('calculator')}
+              onClick={() => handleNav('programs')}
               className="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-white font-semibold text-sm border border-white/20 transition-all hover:scale-105"
             >
-              Free Health Calculator
+              Explore Programs
             </button>
             <button
               onClick={() => handleNav('get-started')}
@@ -134,12 +134,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <div className="space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-white">Tools & Hub</h3>
             <ul className="space-y-2 text-sm text-slate-400">
-              <li>
-                <button onClick={() => handleNav('calculator')} className="hover:text-emerald-300 transition-colors text-left flex items-center gap-1.5">
-                  <span>BMI & Macro Calculator</span>
-                  <span className="text-[10px] px-1 rounded bg-emerald-500/20 text-emerald-300 font-semibold">Free</span>
-                </button>
-              </li>
               <li>
                 <button onClick={() => handleNav('recipes')} className="hover:text-emerald-300 transition-colors text-left">
                   Clinical Recipe Library

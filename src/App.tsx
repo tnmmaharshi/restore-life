@@ -5,7 +5,6 @@ import { Footer } from './components/Footer';
 
 import { HomePage } from './pages/HomePage';
 import { GetStartedPage } from './pages/GetStartedPage';
-import { CalculatorPage } from './pages/CalculatorPage';
 import { ProgramsPage } from './pages/ProgramsPage';
 import { RecipesPage } from './pages/RecipesPage';
 import { WorkoutsPage } from './pages/WorkoutsPage';
@@ -39,12 +38,6 @@ export function App() {
         {currentPage === 'get-started' && (
           <GetStartedPage onNavigate={handleNavigate} prefilledGoal={selectedGoal} />
         )}
-        {currentPage === 'calculator' && (
-          <CalculatorPage 
-            onNavigate={handleNavigate} 
-            onApplyGoalToOnboarding={handleSelectGoal} 
-          />
-        )}
         {currentPage === 'programs' && (
           <ProgramsPage 
             onNavigate={handleNavigate} 
@@ -72,7 +65,6 @@ export function App() {
             {[
               { id: 'home', label: 'Home' },
               { id: 'get-started', label: 'Get Started' },
-              { id: 'calculator', label: 'Health Calculator' },
               { id: 'programs', label: 'Programs' },
               { id: 'recipes', label: 'Recipes' },
               { id: 'workouts', label: 'Workouts' },

@@ -1,7 +1,6 @@
 export type NavigationPage = 
   | 'home' 
   | 'get-started' 
-  | 'calculator' 
   | 'programs' 
   | 'recipes' 
   | 'workouts' 
