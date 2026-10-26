@@ -34,6 +34,10 @@
   .font-serif-display {
     font-family: 'DM Serif Display', Georgia, serif;
   }
+
+  .font-script {
+    font-family: 'Caveat', 'Segoe Script', cursive;
+  }
 }
 
 @layer components {
@@ -61,6 +65,34 @@
   background-image:
     radial-gradient(at 0% 0%, rgba(0, 75, 112, 0.05) 0px, transparent 55%),
     radial-gradient(at 100% 0%, rgba(5, 150, 105, 0.04) 0px, transparent 50%);
+}
+
+/* Rounded-top "arch" frame. --arch-v is the top radius as a share of the
+   height: 40% suits 4:5 frames, 50% suits squares. */
+.arch {
+  border-radius: 50% 50% 28px 28px / var(--arch-v, 40%) var(--arch-v, 40%) 28px 28px;
+}
+.arch-square {
+  --arch-v: 50%;
+}
+
+/* Green brush underline for a highlighted word */
+.brush {
+  position: relative;
+  white-space: nowrap;
+}
+.brush::after {
+  content: '';
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  bottom: 0.02em;
+  height: 0.32em;
+  background: var(--color-leaf);
+  opacity: 0.35;
+  border-radius: 999px;
+  transform: rotate(-1.2deg);
+  z-index: -1;
 }
 
 .field {

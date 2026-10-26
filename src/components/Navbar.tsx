@@ -48,7 +48,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
           <img 
             src={logoImg} 
             alt="RestoreLife" 
-            className="h-10 sm:h-11 w-auto object-contain transition-transform group-hover:scale-[1.02]" 
+            className="h-10 sm:h-11 w-auto object-contain mix-blend-multiply transition-transform group-hover:scale-[1.02]" 
           />
           <div className="hidden lg:block border-l border-slate-200 pl-3">
             <span className="text-[10px] font-bold tracking-widest text-[#004b70] uppercase block">
