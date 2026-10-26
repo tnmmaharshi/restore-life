@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavigationPage } from '../types';
-import { HeartPulse, ArrowRight } from 'lucide-react';
+import logoImg from '../assets/restore-life-logo.png';
+import { ArrowRight, Menu, X } from 'lucide-react';
 
 interface NavbarProps {
   currentPage: NavigationPage;
@@ -8,71 +9,158 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isSupport = currentPage === 'support';
 
-  const handleGetStartedClick = () => {
-    if (currentPage === 'home') {
-      const el = document.getElementById('onboarding-form');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-        return;
-      }
+  const handleSectionScroll = (sectionId: string) => {
+    setMobileMenuOpen(false);
+    if (currentPage !== 'home') {
+      onNavigate('home');
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 150);
+      return;
     }
-    onNavigate('home');
-    setTimeout(() => {
-      const el = document.getElementById('onboarding-form');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleGetStartedClick = () => {
+    handleSectionScroll('onboarding-form');
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/85 backdrop-blur-xl border-b border-slate-200/60 transition-all">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 transition-all shadow-xs">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
-        {/* Brand Logo */}
+        {/* Brand Logo matching live website */}
         <div 
-          onClick={() => onNavigate('home')}
-          className="flex items-center gap-3 cursor-pointer group select-none"
+          onClick={() => {
+            setMobileMenuOpen(false);
+            onNavigate('home');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="flex items-center gap-3 cursor-pointer select-none group"
         >
-          <div className="relative">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#004b70] to-[#0b6897] text-white flex items-center justify-center shadow-md shadow-[#004b70]/20 group-hover:scale-105 transition-transform">
-              <HeartPulse className="w-5 h-5 text-emerald-300" />
-            </div>
-            <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white" />
-          </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-xl sm:text-2xl font-bold tracking-tight text-[#0f2027] font-serif-display">
-                Restore<span className="text-[#004b70]">Life</span>
-              </span>
-            </div>
-            <span className="block text-[10px] font-bold tracking-widest text-slate-400 uppercase">
-              {isSupport ? 'Help & Support Desk' : 'Clinical Nutrition & Care'}
-            </span>
-          </div>
+          <img 
+            src={logoImg} 
+            alt="RestoreLife Clinical Nutrition" 
+            className="h-10 sm:h-11 w-auto object-contain transition-transform group-hover:scale-[1.01]" 
+          />
         </div>
 
-        {/* Right Navigation Controls */}
-        <div className="flex items-center gap-4 sm:gap-6">
+        {/* Desktop Navigation Links */}
+        <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600">
           <button
-            onClick={() => onNavigate('support')}
-            className={`text-xs sm:text-sm font-semibold transition-all px-3 py-1.5 rounded-full ${
+            onClick={() => handleSectionScroll('how-it-works')}
+            className="hover:text-[#004b70] transition-colors cursor-pointer"
+          >
+            How It Works
+          </button>
+          <button
+            onClick={() => handleSectionScroll('results')}
+            className="hover:text-[#004b70] transition-colors cursor-pointer"
+          >
+            Clinical Results
+          </button>
+          <button
+            onClick={() => handleSectionScroll('faq')}
+            className="hover:text-[#004b70] transition-colors cursor-pointer"
+          >
+            FAQ
+          </button>
+          <button
+            onClick={() => {
+              onNavigate('support');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className={`transition-colors cursor-pointer px-3 py-1.5 rounded-full ${
               isSupport 
                 ? 'text-[#004b70] bg-[#e8f4f8] font-bold' 
-                : 'text-slate-600 hover:text-[#004b70] hover:bg-slate-100/70'
+                : 'hover:text-[#004b70]'
             }`}
           >
             Help & Support
           </button>
+        </nav>
 
+        {/* Desktop CTA Button matching screenshot */}
+        <div className="hidden sm:flex items-center gap-4">
           <button
             onClick={handleGetStartedClick}
-            className="group relative inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 rounded-full bg-[#004b70] hover:bg-[#003854] text-white font-semibold text-xs sm:text-sm shadow-md shadow-[#004b70]/20 hover:shadow-lg hover:shadow-[#004b70]/30 active:scale-95 transition-all"
+            className="group relative inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#004b70] hover:bg-[#003854] text-white font-semibold text-sm shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02] active:scale-95 cursor-pointer"
           >
             <span>Get Started</span>
-            <ArrowRight className="w-3.5 h-3.5 text-emerald-300 group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight className="w-4 h-4 text-emerald-300 group-hover:translate-x-0.5 transition-transform" />
+          </button>
+        </div>
+
+        {/* Mobile Hamburger Button */}
+        <div className="flex md:hidden items-center gap-3">
+          <button
+            onClick={handleGetStartedClick}
+            className="px-4 py-2 rounded-full bg-[#004b70] text-white text-xs font-semibold shadow-xs"
+          >
+            Get Started
+          </button>
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
+
+      {/* Mobile Drawer */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t border-slate-200 bg-white px-4 py-5 space-y-4 shadow-lg animate-in fade-in duration-200">
+          <div className="flex flex-col space-y-3 text-sm font-medium text-slate-700">
+            <button
+              onClick={() => handleSectionScroll('how-it-works')}
+              className="text-left py-2 px-3 rounded-lg hover:bg-slate-50 hover:text-[#004b70]"
+            >
+              How It Works
+            </button>
+            <button
+              onClick={() => handleSectionScroll('results')}
+              className="text-left py-2 px-3 rounded-lg hover:bg-slate-50 hover:text-[#004b70]"
+            >
+              Clinical Results
+            </button>
+            <button
+              onClick={() => handleSectionScroll('faq')}
+              className="text-left py-2 px-3 rounded-lg hover:bg-slate-50 hover:text-[#004b70]"
+            >
+              FAQ
+            </button>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onNavigate('support');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className={`text-left py-2 px-3 rounded-lg ${
+                isSupport ? 'bg-[#e8f4f8] text-[#004b70] font-bold' : 'hover:bg-slate-50 hover:text-[#004b70]'
+              }`}
+            >
+              Help & Support
+            </button>
+          </div>
+          <div className="pt-2 border-t border-slate-100">
+            <button
+              onClick={handleGetStartedClick}
+              className="w-full py-3 rounded-full bg-[#004b70] text-white text-sm font-semibold flex items-center justify-center gap-2"
+            >
+              <span>Get Started</span>
+              <ArrowRight className="w-4 h-4 text-emerald-300" />
+            </button>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

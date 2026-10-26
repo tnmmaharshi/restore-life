@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HEALTH_GOALS, PREFERRED_MODES, FAQS, CLIENT_RESULTS } from '../data/mockData';
 import { ConsultationForm } from '../types';
 import { 
@@ -11,10 +11,19 @@ import {
   ChevronDown, 
   ChevronUp, 
   X,
-  ShieldCheck
+  ShieldCheck,
+  Sparkles,
+  Activity,
+  Award,
+  Clock,
+  Lock
 } from 'lucide-react';
 
-export const HomePage: React.FC = () => {
+interface HomePageProps {
+  onNavigateSupport?: () => void;
+}
+
+export const HomePage: React.FC<HomePageProps> = ({ onNavigateSupport }) => {
   const [formData, setFormData] = useState<ConsultationForm>({
     firstName: '',
     lastName: '',
@@ -32,9 +41,21 @@ export const HomePage: React.FC = () => {
   const [submittedData, setSubmittedData] = useState<ConsultationForm | null>(null);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
+  useEffect(() => {
+    const targetId = decodeURIComponent(window.location.hash.slice(1));
+    if (!targetId) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
   const scrollToForm = () => {
     const el = document.getElementById('onboarding-form');
     if (el) {
+      window.history.replaceState({}, '', '#onboarding-form');
       el.scrollIntoView({ behavior: 'smooth' });
     }
   };
@@ -85,7 +106,7 @@ export const HomePage: React.FC = () => {
         notes: '',
       });
       setErrors({});
-    }, 600);
+    }, 500);
   };
 
   const toggleFaq = (idx: number) => {
@@ -93,159 +114,214 @@ export const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-24 sm:space-y-36 pb-24 overflow-hidden">
-      {/* 1. HERO SECTION WITH AMBIENT LIGHTING */}
-      <section className="relative pt-14 sm:pt-22 pb-10 text-center max-w-5xl mx-auto px-4 sm:px-6">
-        {/* Soft Ambient Glow Orbs */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[450px] bg-gradient-to-tr from-[#004b70]/10 via-emerald-200/20 to-transparent rounded-full blur-3xl pointer-events-none -z-10" />
+    <div className="home-page space-y-24 sm:space-y-32 pb-24 overflow-hidden">
+      
+      {/* 1. HERO SECTION (Matching Screenshot 5) */}
+      <section className="relative pt-12 sm:pt-20 pb-12 px-4 sm:px-6 max-w-5xl mx-auto text-center">
+        {/* Subtle decorative glowing background blur */}
+        <div 
+          aria-hidden="true" 
+          className="absolute -top-16 left-1/2 -translate-x-1/2 w-96 sm:w-[600px] h-96 bg-[#004b70]/8 rounded-full blur-3xl pointer-events-none -z-10" 
+        />
 
-        <div className="space-y-6 sm:space-y-8">
-          {/* Badge with live beacon */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/90 border border-slate-200/90 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-md">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[#004b70] font-bold">Clinical Nutrition</span>
-            <span className="text-slate-300">•</span>
-            <span>Lifestyle Medicine Protocol</span>
+        <div className="space-y-6 sm:space-y-8 max-w-4xl mx-auto">
+          {/* Pill Badge matching Screenshot 5 */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8f4f8] border border-[#004b70]/15 text-[#004b70] text-xs sm:text-sm font-medium shadow-2xs">
+            <Sparkles className="w-4 h-4 text-[#004b70]" />
+            <span>Clinical Nutrition &amp; Lifestyle Medicine</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse ml-0.5" />
           </div>
 
-          {/* Heading */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal text-[#0f2027] font-serif-display tracking-tight leading-[1.12]">
-            Start Your Clinical Health & <br className="hidden sm:inline" />
-            <span className="bg-gradient-to-r from-[#004b70] via-[#0b6897] to-emerald-700 bg-clip-text text-transparent">
-              Nutrition Journey
-            </span>
+          {/* Main Hero Serif Title matching Screenshot 5 */}
+          <h1 className="text-4xl sm:text-6xl md:text-[68px] font-normal text-[#0f2027] font-serif-display tracking-tight leading-[1.12]">
+            Start Your Clinical Health &amp; <br className="hidden sm:inline" />Nutrition Journey
           </h1>
 
-          {/* Subheading */}
-          <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          {/* Supporting Lead Description */}
+          <p className="text-base sm:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-normal">
             RestoreLife connects you with licensed clinical dietitians to reverse metabolic conditions, balance your biomarkers, and build sustainable eating habits through 1-on-1 personalized medical nutrition therapy.
           </p>
 
-          {/* Hero CTA Button */}
+          {/* CTA Action Button */}
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={scrollToForm}
-              className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-[#004b70] hover:bg-[#003854] text-white text-sm font-semibold shadow-lg shadow-[#004b70]/25 transition-all hover:scale-105 active:scale-95 cursor-pointer"
+              className="group relative inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-[#004b70] hover:bg-[#003854] text-white text-base font-semibold shadow-md shadow-[#004b70]/20 hover:shadow-lg hover:shadow-[#004b70]/30 transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer w-full sm:w-auto"
             >
               <span>Request Onboarding</span>
               <ArrowRight className="w-4 h-4 text-emerald-300 group-hover:translate-x-1 transition-transform" />
             </button>
+            <a
+              href="#how-it-works"
+              className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-sm font-semibold transition-all hover:border-slate-300 w-full sm:w-auto shadow-2xs"
+            >
+              <span>Explore 4-Step Process</span>
+            </a>
           </div>
 
-          {/* Trust Metrics Row */}
-          <div className="pt-6 border-t border-slate-200/60 max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-            <div className="space-y-0.5">
-              <p className="text-xl sm:text-2xl font-extrabold text-[#004b70] font-serif-display">94.2%</p>
-              <p className="text-xs text-slate-500 font-medium">Biomarker Improvement</p>
+          {/* Trust Metrics Bar */}
+          <div className="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto text-left">
+            <div className="p-4 rounded-2xl bg-white/80 border border-slate-200/80 shadow-2xs backdrop-blur-xs flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
+                <Activity className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-slate-900">94.2%</p>
+                <p className="text-[11px] text-slate-500">Biomarker shift</p>
+              </div>
             </div>
-            <div className="space-y-0.5">
-              <p className="text-xl sm:text-2xl font-extrabold text-[#004b70] font-serif-display">1-on-1</p>
-              <p className="text-xs text-slate-500 font-medium">Certified Dietitian Care</p>
+
+            <div className="p-4 rounded-2xl bg-white/80 border border-slate-200/80 shadow-2xs backdrop-blur-xs flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-[#e8f4f8] text-[#004b70] flex items-center justify-center shrink-0">
+                <Stethoscope className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-slate-900">1-on-1 Care</p>
+                <p className="text-[11px] text-slate-500">Certified dietitians</p>
+              </div>
             </div>
-            <div className="space-y-0.5">
-              <p className="text-xl sm:text-2xl font-extrabold text-[#004b70] font-serif-display">&lt; 24h</p>
-              <p className="text-xs text-slate-500 font-medium">Care Desk Response</p>
+
+            <div className="p-4 rounded-2xl bg-white/80 border border-slate-200/80 shadow-2xs backdrop-blur-xs flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-sky-50 text-sky-700 flex items-center justify-center shrink-0">
+                <Clock className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-slate-900">&lt; 24h Response</p>
+                <p className="text-[11px] text-slate-500">Clinical coordinator</p>
+              </div>
             </div>
-            <div className="space-y-0.5">
-              <p className="text-xl sm:text-2xl font-extrabold text-emerald-700 font-serif-display">100%</p>
-              <p className="text-xs text-slate-500 font-medium">Evidence-Based</p>
+
+            <div className="p-4 rounded-2xl bg-white/80 border border-slate-200/80 shadow-2xs backdrop-blur-xs flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center shrink-0">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-slate-900">100% Private</p>
+                <p className="text-[11px] text-slate-500">DISHA compliant</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. HOW BECOMING A CLIENT WORKS (4 CARDS) */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12">
+      {/* 2. HOW BECOMING A CLIENT WORKS (Matching Screenshot 4) */}
+      <section id="how-it-works" className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12">
         <div className="text-center max-w-2xl mx-auto space-y-3">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#004b70]">
-            The Journey
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-normal text-[#0f2027] font-serif-display">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal text-[#0f2027] font-serif-display tracking-tight">
             How Becoming a Client Works
           </h2>
-          <p className="text-sm text-slate-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
             Because our nutrition plans are medical-grade and tailored to your specific lab work, we guide every new client through a dedicated 4-step onboarding journey.
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Step 1 */}
-          <div className="group p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-[#004b70]/30 hover:-translate-y-1 transition-all duration-300 space-y-5">
-            <div className="flex items-center justify-between">
-              <div className="w-12 h-12 rounded-2xl bg-[#e8f4f8] text-[#004b70] flex items-center justify-center shadow-2xs group-hover:bg-[#004b70] group-hover:text-white transition-colors">
-                <FileText className="w-6 h-6" />
+          <div className="luxury-card rounded-3xl p-8 space-y-6 flex flex-col justify-between">
+            <div className="space-y-5">
+              <div className="flex items-center justify-between">
+                <div className="w-14 h-14 rounded-2xl bg-[#e8f4f8] text-[#004b70] flex items-center justify-center shadow-2xs">
+                  <FileText className="w-6 h-6" />
+                </div>
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  Step 01
+                </span>
               </div>
-              <span className="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Step 01</span>
+              <div className="space-y-2">
+                <h3 className="font-bold text-lg text-[#0f2027]">1. Request Onboarding</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">
+                  Submit your contact details and primary health goals via the form below.
+                </p>
+              </div>
             </div>
-            <div className="space-y-2">
-              <h3 className="font-bold text-base text-[#0f2027]">1. Request Onboarding</h3>
-              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                Submit your contact details and primary health goals via the form below.
-              </p>
+            <div className="pt-4 border-t border-slate-100 flex items-center text-xs text-[#004b70] font-semibold">
+              <span>Quick 2-minute form</span>
             </div>
           </div>
 
           {/* Step 2 */}
-          <div className="group p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-[#004b70]/30 hover:-translate-y-1 transition-all duration-300 space-y-5">
-            <div className="flex items-center justify-between">
-              <div className="w-12 h-12 rounded-2xl bg-[#e8f4f8] text-[#004b70] flex items-center justify-center shadow-2xs group-hover:bg-[#004b70] group-hover:text-white transition-colors">
-                <UserCheck className="w-6 h-6" />
+          <div className="luxury-card rounded-3xl p-8 space-y-6 flex flex-col justify-between">
+            <div className="space-y-5">
+              <div className="flex items-center justify-between">
+                <div className="w-14 h-14 rounded-2xl bg-[#e8f4f8] text-[#004b70] flex items-center justify-center shadow-2xs">
+                  <UserCheck className="w-6 h-6" />
+                </div>
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  Step 02
+                </span>
               </div>
-              <span className="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Step 02</span>
+              <div className="space-y-2">
+                <h3 className="font-bold text-lg text-[#0f2027]">2. Account Creation</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">
+                  Our clinical care coordinator contacts you within 24 hours to create your account and issue your intake assessment.
+                </p>
+              </div>
             </div>
-            <div className="space-y-2">
-              <h3 className="font-bold text-base text-[#0f2027]">2. Account Creation</h3>
-              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                Our clinical care coordinator contacts you within 24 hours to create your account and issue your intake assessment.
-              </p>
+            <div className="pt-4 border-t border-slate-100 flex items-center text-xs text-[#004b70] font-semibold">
+              <span>Coordinated within 24h</span>
             </div>
           </div>
 
           {/* Step 3 */}
-          <div className="group p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-[#004b70]/30 hover:-translate-y-1 transition-all duration-300 space-y-5">
-            <div className="flex items-center justify-between">
-              <div className="w-12 h-12 rounded-2xl bg-[#e8f4f8] text-[#004b70] flex items-center justify-center shadow-2xs group-hover:bg-[#004b70] group-hover:text-white transition-colors">
-                <Stethoscope className="w-6 h-6" />
+          <div className="luxury-card rounded-3xl p-8 space-y-6 flex flex-col justify-between">
+            <div className="space-y-5">
+              <div className="flex items-center justify-between">
+                <div className="w-14 h-14 rounded-2xl bg-[#e8f4f8] text-[#004b70] flex items-center justify-center shadow-2xs">
+                  <Stethoscope className="w-6 h-6" />
+                </div>
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  Step 03
+                </span>
               </div>
-              <span className="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Step 03</span>
+              <div className="space-y-2">
+                <h3 className="font-bold text-lg text-[#0f2027]">3. 1-on-1 Consultation</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">
+                  Meet with your certified dietitian to review blood biomarkers, metabolic history, and target health parameters.
+                </p>
+              </div>
             </div>
-            <div className="space-y-2">
-              <h3 className="font-bold text-base text-[#0f2027]">3. 1-on-1 Consultation</h3>
-              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                Meet with your certified dietitian to review blood biomarkers, metabolic history, and target health parameters.
-              </p>
+            <div className="pt-4 border-t border-slate-100 flex items-center text-xs text-[#004b70] font-semibold">
+              <span>Doctor &amp; Dietitian led</span>
             </div>
           </div>
 
           {/* Step 4 */}
-          <div className="group p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-[#004b70]/30 hover:-translate-y-1 transition-all duration-300 space-y-5">
-            <div className="flex items-center justify-between">
-              <div className="w-12 h-12 rounded-2xl bg-[#e8f4f8] text-[#004b70] flex items-center justify-center shadow-2xs group-hover:bg-[#004b70] group-hover:text-white transition-colors">
-                <Smartphone className="w-6 h-6" />
+          <div className="luxury-card rounded-3xl p-8 space-y-6 flex flex-col justify-between">
+            <div className="space-y-5">
+              <div className="flex items-center justify-between">
+                <div className="w-14 h-14 rounded-2xl bg-[#e8f4f8] text-[#004b70] flex items-center justify-center shadow-2xs">
+                  <Smartphone className="w-6 h-6" />
+                </div>
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  Step 04
+                </span>
               </div>
-              <span className="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Step 04</span>
+              <div className="space-y-2">
+                <h3 className="font-bold text-lg text-[#0f2027]">4. Active Mobile Care</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">
+                  Sign in to the RestoreLife app to access your customized meal plans, healthy recipes, tracking, and ongoing coaching.
+                </p>
+              </div>
             </div>
-            <div className="space-y-2">
-              <h3 className="font-bold text-base text-[#0f2027]">4. Active Mobile Care</h3>
-              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                Sign in to the RestoreLife app to access your customized meal plans, healthy recipes, tracking, and ongoing coaching.
-              </p>
+            <div className="pt-4 border-t border-slate-100 flex items-center text-xs text-[#004b70] font-semibold">
+              <span>Personalized app suite</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 3. REQUEST CLIENT ONBOARDING FORM */}
+      {/* 3. REQUEST CLIENT ONBOARDING FORM (Matching Screenshot 2) */}
       <section id="onboarding-form" className="max-w-2xl mx-auto px-4 sm:px-6">
-        <div className="relative rounded-3xl bg-white border border-slate-200/90 p-8 sm:p-12 shadow-xl shadow-slate-200/50 space-y-8">
-          <div className="text-center space-y-2">
+        <div className="luxury-card rounded-3xl p-8 sm:p-12 space-y-8 relative overflow-hidden">
+          {/* Header */}
+          <div className="text-center space-y-3">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#e8f4f8] text-[#004b70] text-xs font-semibold">
-              <ShieldCheck className="w-3.5 h-3.5" /> Confidential Intake
+              <Lock className="w-3.5 h-3.5" /> Confidential Intake
             </div>
-            <h2 className="text-3xl font-normal text-[#0f2027] font-serif-display">
+            <h2 className="text-3xl sm:text-4xl font-normal text-[#0f2027] font-serif-display">
               Request Client Onboarding
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto leading-relaxed">
+            <p className="text-sm text-slate-500 max-w-lg mx-auto leading-relaxed">
               Fill in your details below. Our clinical care desk will connect with you to complete your enrollment and arrange your initial consultation.
             </p>
           </div>
@@ -265,7 +341,7 @@ export const HomePage: React.FC = () => {
                   className={`w-full px-4 py-3 rounded-2xl border text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#004b70]/10 ${
                     errors.firstName 
                       ? 'border-rose-400 bg-rose-50/20' 
-                      : 'border-slate-200 focus:border-[#004b70]'
+                      : 'border-slate-200 focus:border-[#004b70] bg-white'
                   }`}
                 />
                 {errors.firstName && <p className="text-xs text-rose-500">{errors.firstName}</p>}
@@ -283,7 +359,7 @@ export const HomePage: React.FC = () => {
                   className={`w-full px-4 py-3 rounded-2xl border text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#004b70]/10 ${
                     errors.lastName 
                       ? 'border-rose-400 bg-rose-50/20' 
-                      : 'border-slate-200 focus:border-[#004b70]'
+                      : 'border-slate-200 focus:border-[#004b70] bg-white'
                   }`}
                 />
                 {errors.lastName && <p className="text-xs text-rose-500">{errors.lastName}</p>}
@@ -303,20 +379,20 @@ export const HomePage: React.FC = () => {
                 className={`w-full px-4 py-3 rounded-2xl border text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#004b70]/10 ${
                   errors.email 
                     ? 'border-rose-400 bg-rose-50/20' 
-                    : 'border-slate-200 focus:border-[#004b70]'
+                    : 'border-slate-200 focus:border-[#004b70] bg-white'
                 }`}
               />
               {errors.email && <p className="text-xs text-rose-500">{errors.email}</p>}
             </div>
 
-            {/* Phone Number with Country Code */}
+            {/* Phone Number with Indian Flag Pill matching Screenshot 2 */}
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-700">
                 Phone Number <span className="text-rose-500">*</span>
               </label>
               <div className="flex gap-2">
-                <div className="flex items-center gap-1.5 px-3 py-3 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-medium text-slate-700 shrink-0">
-                  <span>🇮🇳</span>
+                <div className="flex items-center gap-1.5 px-3 py-3 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-medium text-slate-700 shrink-0 select-none">
+                  <span className="text-base">🇮🇳</span>
                   <span>+91</span>
                 </div>
                 <input
@@ -327,7 +403,7 @@ export const HomePage: React.FC = () => {
                   className={`flex-1 px-4 py-3 rounded-2xl border text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#004b70]/10 ${
                     errors.phone 
                       ? 'border-rose-400 bg-rose-50/20' 
-                      : 'border-slate-200 focus:border-[#004b70]'
+                      : 'border-slate-200 focus:border-[#004b70] bg-white'
                   }`}
                 />
               </div>
@@ -343,7 +419,7 @@ export const HomePage: React.FC = () => {
                 <select
                   value={formData.healthGoal}
                   onChange={(e) => setFormData({ ...formData, healthGoal: e.target.value })}
-                  className={`w-full appearance-none px-4 py-3 rounded-2xl border text-sm bg-white transition-all focus:outline-none focus:ring-2 focus:ring-[#004b70]/10 pr-10 ${
+                  className={`w-full appearance-none px-4 py-3 rounded-2xl border text-sm bg-white transition-all focus:outline-none focus:ring-2 focus:ring-[#004b70]/10 pr-10 cursor-pointer ${
                     errors.healthGoal 
                       ? 'border-rose-400 bg-rose-50/20' 
                       : 'border-slate-200 focus:border-[#004b70]'
@@ -370,7 +446,7 @@ export const HomePage: React.FC = () => {
                 <select
                   value={formData.preferredMode}
                   onChange={(e) => setFormData({ ...formData, preferredMode: e.target.value as any })}
-                  className="w-full appearance-none px-4 py-3 rounded-2xl border border-slate-200 text-sm bg-white transition-all focus:outline-none focus:ring-2 focus:ring-[#004b70]/10 pr-10 text-slate-800"
+                  className="w-full appearance-none px-4 py-3 rounded-2xl border border-slate-200 text-sm bg-white transition-all focus:outline-none focus:ring-2 focus:ring-[#004b70]/10 pr-10 text-slate-800 cursor-pointer"
                 >
                   {PREFERRED_MODES.map((mode) => (
                     <option key={mode.value} value={mode.value}>
@@ -385,14 +461,14 @@ export const HomePage: React.FC = () => {
             {/* Optional Notes */}
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-700">
-                Health Goals & Background (Optional)
+                Health Background &amp; Specific Goals (Optional)
               </label>
               <textarea
                 rows={3}
                 value={formData.notes}
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                placeholder="Share any specific dietary preferences, current medications, or health background..."
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 text-sm focus:outline-none focus:border-[#004b70] focus:ring-2 focus:ring-[#004b70]/10"
+                placeholder="Share any existing conditions, current medications, or dietary preferences..."
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 text-sm focus:outline-none focus:border-[#004b70] focus:ring-2 focus:ring-[#004b70]/10 bg-white"
               />
             </div>
 
@@ -401,14 +477,14 @@ export const HomePage: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-4 rounded-full bg-[#004b70] hover:bg-[#003854] text-white text-sm font-semibold shadow-md shadow-[#004b70]/20 transition-all hover:scale-[1.01] active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70"
+                className="w-full py-4 rounded-full bg-[#004b70] hover:bg-[#003854] text-white text-sm font-semibold shadow-md shadow-[#004b70]/20 hover:shadow-lg transition-all duration-200 hover:scale-[1.01] active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70"
               >
-                <span>{isSubmitting ? 'Submitting request...' : 'Submit Onboarding Request'}</span>
+                <span>{isSubmitting ? 'Transmitting request...' : 'Submit Onboarding Request'}</span>
                 <ArrowRight className="w-4 h-4 text-emerald-300" />
               </button>
 
-              <p className="text-[11px] text-slate-400 text-center">
-                By submitting, you agree to receive communications from RestoreLife regarding your care enrollment.
+              <p className="text-[11px] text-slate-400 text-center leading-relaxed">
+                By submitting, your data is processed securely under clinical privacy protocols. A care coordinator will connect with you within 24 hours.
               </p>
             </div>
           </form>
@@ -416,47 +492,47 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 4. REAL DOCUMENTED BIOMARKER OUTCOMES */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 space-y-8">
-        <div className="text-center max-w-2xl mx-auto space-y-2">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#004b70]">
-            Clinical Efficacy
-          </span>
+      <section id="results" className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10">
+        <div className="text-center max-w-2xl mx-auto space-y-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold">
+            <Award className="w-3.5 h-3.5" /> Clinical Evidence
+          </div>
           <h2 className="text-3xl sm:text-4xl font-normal text-[#0f2027] font-serif-display">
             Real Lab Outcomes. Restored Vitality.
           </h2>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-slate-500 leading-relaxed">
             Documented biomarker shifts under personalized 1-on-1 medical nutrition therapy.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {CLIENT_RESULTS.map((res, i) => (
-            <div key={i} className="p-7 rounded-3xl bg-white border border-slate-200/80 shadow-xs space-y-4 flex flex-col justify-between">
+            <div key={i} className="luxury-card rounded-3xl p-7 space-y-5 flex flex-col justify-between">
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-bold text-[#004b70]">{res.name} ({res.age}y)</span>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#e8f4f8] text-[#004b70]">
+                  <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#e8f4f8] text-[#004b70]">
                     {res.duration}
                   </span>
                 </div>
-                <p className="text-xs font-semibold text-slate-500">{res.condition}</p>
+                <p className="text-xs font-semibold text-slate-700">{res.condition}</p>
                 <p className="text-xs sm:text-sm text-slate-600 italic leading-relaxed">
                   "{res.quote}"
                 </p>
               </div>
 
-              <div className="pt-3 border-t border-slate-100 grid grid-cols-2 gap-2 text-xs">
-                <div className="p-2 rounded-xl bg-slate-50">
-                  <span className="text-[10px] text-slate-400 block">Biomarker</span>
-                  <div className="flex items-baseline gap-1 mt-0.5">
-                    <strong className="text-emerald-700 font-bold">{res.hba1c.after}</strong>
-                    <span className="text-[10px] text-slate-400 line-through">{res.hba1c.before}</span>
+              <div className="pt-4 border-t border-slate-100 grid grid-cols-2 gap-3 text-xs">
+                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">Biomarker</span>
+                  <div className="flex items-baseline gap-1.5 mt-1">
+                    <strong className="text-emerald-700 font-bold text-sm">{res.hba1c.after}</strong>
+                    <span className="text-xs text-slate-400 line-through">{res.hba1c.before}</span>
                   </div>
                 </div>
-                <div className="p-2 rounded-xl bg-slate-50">
-                  <span className="text-[10px] text-slate-400 block">Metric Shift</span>
-                  <div className="flex items-baseline gap-1 mt-0.5">
-                    <strong className="text-slate-900 font-bold">{res.weight.after}</strong>
+                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">Metric Shift</span>
+                  <div className="flex items-baseline gap-1.5 mt-1">
+                    <strong className="text-slate-900 font-bold text-sm">{res.weight.after}</strong>
                   </div>
                 </div>
               </div>
@@ -465,9 +541,9 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 5. FREQUENTLY ASKED QUESTIONS */}
-      <section className="max-w-3xl mx-auto px-4 sm:px-6 space-y-8">
-        <div className="text-center space-y-2">
+      {/* 5. FREQUENTLY ASKED QUESTIONS (Matching Screenshot 3) */}
+      <section id="faq" className="max-w-4xl mx-auto px-4 sm:px-6 space-y-8">
+        <div className="text-center space-y-3">
           <h2 className="text-3xl sm:text-4xl font-normal text-[#0f2027] font-serif-display">
             Frequently Asked Questions
           </h2>
@@ -482,28 +558,53 @@ export const HomePage: React.FC = () => {
             return (
               <div
                 key={idx}
-                className="rounded-2xl border border-slate-200/80 bg-white overflow-hidden transition-all shadow-2xs"
+                className="luxury-card rounded-2xl overflow-hidden transition-all"
               >
                 <button
                   type="button"
                   onClick={() => toggleFaq(idx)}
-                  className="w-full text-left p-5 flex items-center justify-between gap-4 font-medium text-slate-900 text-sm sm:text-base hover:text-[#004b70] transition-colors cursor-pointer"
+                  aria-expanded={isOpen}
+                  className="w-full text-left p-5 sm:p-6 flex items-center justify-between gap-4 font-medium text-slate-900 text-sm sm:text-base hover:text-[#004b70] transition-colors cursor-pointer select-none"
                 >
-                  <span>{faq.question}</span>
+                  <span className="font-semibold">{faq.question}</span>
                   {isOpen ? (
-                    <ChevronUp className="w-4 h-4 text-[#004b70] shrink-0" />
+                    <ChevronUp className="w-5 h-5 text-[#004b70] shrink-0" />
                   ) : (
-                    <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />
+                    <ChevronDown className="w-5 h-5 text-slate-400 shrink-0" />
                   )}
                 </button>
                 {isOpen && (
-                  <div className="px-5 pb-5 text-xs sm:text-sm text-slate-500 leading-relaxed border-t border-slate-100 pt-3">
+                  <div className="px-5 sm:px-6 pb-6 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
                     {faq.answer}
                   </div>
                 )}
               </div>
             );
           })}
+        </div>
+
+        {/* Bottom Help prompt */}
+        <div className="text-center pt-4">
+          <p className="text-xs sm:text-sm text-slate-500">
+            Still have questions? Reach out to our dedicated care desk at{' '}
+            <a 
+              href="mailto:support@restorelife.co.in" 
+              className="text-[#004b70] font-semibold underline underline-offset-2 hover:text-[#003854]"
+            >
+              support@restorelife.co.in
+            </a>
+            {onNavigateSupport && (
+              <>
+                {' '}or visit our{' '}
+                <button 
+                  onClick={onNavigateSupport}
+                  className="text-[#004b70] font-semibold underline underline-offset-2 hover:text-[#003854] cursor-pointer"
+                >
+                  Help &amp; Support Center →
+                </button>
+              </>
+            )}
+          </p>
         </div>
       </section>
 
@@ -513,14 +614,15 @@ export const HomePage: React.FC = () => {
           <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
             <button
               onClick={() => setIsSuccessModalOpen(false)}
-              className="absolute top-5 right-5 text-slate-400 hover:text-slate-600 p-1 rounded-lg cursor-pointer"
+              className="absolute top-5 right-5 text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+              aria-label="Close modal"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="text-center space-y-3">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#e8f4f8] text-[#004b70]">
-                <CheckCircle2 className="h-8 w-8 text-[#004b70]" />
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#e8f4f8] text-[#004b70] shadow-2xs">
+                <CheckCircle2 className="h-9 w-9 text-[#004b70]" />
               </div>
               <h3 className="font-serif-display font-normal text-2xl text-[#0f2027]">
                 Onboarding Request Received
@@ -530,13 +632,13 @@ export const HomePage: React.FC = () => {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-slate-200/80 bg-slate-50 p-4 space-y-2 text-xs text-slate-600">
-              <p className="font-medium text-slate-800">What happens next:</p>
-              <ul className="space-y-1.5 list-disc pl-4 text-slate-500">
-                <li>Our team sets up your private client profile</li>
-                <li>You receive your intake assessment link via email</li>
-                <li>Your initial video consultation is scheduled</li>
-                <li>Your mobile app access is activated</li>
+            <div className="rounded-2xl border border-slate-200/80 bg-slate-50 p-5 space-y-2.5 text-xs text-slate-600">
+              <p className="font-bold text-slate-800">What happens next:</p>
+              <ul className="space-y-2 list-disc pl-4 text-slate-500">
+                <li>Our clinical coordinator verifies your health goals</li>
+                <li>You receive a secure link to upload prior blood reports</li>
+                <li>Your dedicated dietitian is assigned for consultation</li>
+                <li>RestoreLife mobile app access is provisioned</li>
               </ul>
             </div>
 
@@ -544,7 +646,7 @@ export const HomePage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsSuccessModalOpen(false)}
-                className="w-full rounded-2xl bg-[#004b70] hover:bg-[#003956] text-white text-sm font-semibold h-12 shadow-sm transition-all cursor-pointer"
+                className="w-full rounded-full bg-[#004b70] hover:bg-[#003854] text-white text-sm font-semibold h-12 shadow-md shadow-[#004b70]/20 transition-all cursor-pointer"
               >
                 Done
               </button>
