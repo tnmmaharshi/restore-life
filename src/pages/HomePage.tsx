@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { HEALTH_GOALS, PREFERRED_MODES, FAQS, CLIENT_RESULTS } from '../data/mockData';
+import { 
+  HEALTH_GOALS, 
+  PREFERRED_MODES, 
+  FAQS, 
+  CLIENT_RESULTS,
+  CLINICAL_CONDITIONS,
+  ClinicalCondition
+} from '../data/mockData';
 import { ConsultationForm } from '../types';
 import { 
   FileText, 
@@ -16,7 +23,10 @@ import {
   Activity,
   Award,
   Clock,
-  Lock
+  Lock,
+  Check,
+  Layers,
+  ArrowUpRight
 } from 'lucide-react';
 
 interface HomePageProps {
@@ -40,6 +50,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateSupport }) => {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [submittedData, setSubmittedData] = useState<ConsultationForm | null>(null);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const [activeResultCategory, setActiveResultCategory] = useState<string>('all');
 
   useEffect(() => {
     const targetId = decodeURIComponent(window.location.hash.slice(1));
@@ -52,7 +63,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateSupport }) => {
     return () => window.cancelAnimationFrame(frame);
   }, []);
 
-  const scrollToForm = () => {
+  const scrollToForm = (prefillGoal?: string) => {
+    if (prefillGoal) {
+      setFormData(prev => ({ ...prev, healthGoal: prefillGoal }));
+    }
     const el = document.getElementById('onboarding-form');
     if (el) {
       window.history.replaceState({}, '', '#onboarding-form');
@@ -113,101 +127,271 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateSupport }) => {
     setOpenFaqIndex(openFaqIndex === idx ? null : idx);
   };
 
+  const filteredResults = activeResultCategory === 'all'
+    ? CLIENT_RESULTS
+    : CLIENT_RESULTS.filter(res => res.category.toLowerCase().includes(activeResultCategory.toLowerCase()));
+
   return (
     <div className="home-page space-y-24 sm:space-y-32 pb-24 overflow-hidden">
       
-      {/* 1. HERO SECTION (Matching Screenshot 5) */}
-      <section className="relative pt-12 sm:pt-20 pb-12 px-4 sm:px-6 max-w-5xl mx-auto text-center">
-        {/* Subtle decorative glowing background blur */}
-        <div 
-          aria-hidden="true" 
-          className="absolute -top-16 left-1/2 -translate-x-1/2 w-96 sm:w-[600px] h-96 bg-[#004b70]/8 rounded-full blur-3xl pointer-events-none -z-10" 
-        />
+      {/* 1. HERO SECTION (Split Visual Layout matching Screenshot 5) */}
+      <section className="relative hero-mesh pt-12 sm:pt-20 pb-16 px-4 sm:px-6 lg:px-8 border-b border-slate-200/60">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          
+          {/* Left Column: Headline & Value Proposition */}
+          <div className="lg:col-span-7 space-y-6 sm:space-y-8 text-center lg:text-left">
+            {/* Pill Badge matching Screenshot 5 */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8f4f8] border border-[#004b70]/15 text-[#004b70] text-xs sm:text-sm font-semibold shadow-2xs">
+              <Sparkles className="w-4 h-4 text-[#004b70]" />
+              <span>Clinical Nutrition &amp; Lifestyle Medicine</span>
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse ml-0.5" />
+            </div>
 
-        <div className="space-y-6 sm:space-y-8 max-w-4xl mx-auto">
-          {/* Pill Badge matching Screenshot 5 */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8f4f8] border border-[#004b70]/15 text-[#004b70] text-xs sm:text-sm font-medium shadow-2xs">
-            <Sparkles className="w-4 h-4 text-[#004b70]" />
-            <span>Clinical Nutrition &amp; Lifestyle Medicine</span>
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse ml-0.5" />
+            {/* Editorial Title */}
+            <h1 className="text-4xl sm:text-6xl md:text-[64px] font-normal text-[#0a1922] font-serif-display tracking-tight leading-[1.12]">
+              Start Your Clinical Health &amp; <br className="hidden sm:inline" />
+              <span className="italic text-[#004b70]">Nutrition Journey</span>
+            </h1>
+
+            {/* Supporting Lead Description */}
+            <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
+              RestoreLife connects you with licensed clinical dietitians to reverse metabolic conditions, balance your biomarkers, and build sustainable eating habits through 1-on-1 personalized medical nutrition therapy.
+            </p>
+
+            {/* Action Buttons */}
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+              <button
+                onClick={() => scrollToForm()}
+                className="group relative inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-[#004b70] hover:bg-[#003854] text-white text-base font-semibold shadow-md shadow-[#004b70]/20 hover:shadow-lg hover:shadow-[#004b70]/30 transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer w-full sm:w-auto"
+              >
+                <span>Request Onboarding</span>
+                <ArrowRight className="w-4 h-4 text-emerald-300 group-hover:translate-x-1 transition-transform" />
+              </button>
+              <a
+                href="#how-it-works"
+                className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-sm font-semibold transition-all hover:border-slate-300 w-full sm:w-auto shadow-2xs"
+              >
+                <span>How It Works (4 Steps)</span>
+              </a>
+            </div>
+
+            {/* Clinical Trust Metrics Row */}
+            <div className="pt-6 border-t border-slate-200/70 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-left">
+              <div className="p-3.5 rounded-2xl bg-white/90 border border-slate-200/80 shadow-2xs">
+                <div className="flex items-center gap-1.5 text-emerald-700 font-bold text-sm">
+                  <Activity className="w-4 h-4" />
+                  <span>94.2%</span>
+                </div>
+                <p className="text-[11px] text-slate-500 mt-0.5">Biomarker reversal</p>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-white/90 border border-slate-200/80 shadow-2xs">
+                <div className="flex items-center gap-1.5 text-[#004b70] font-bold text-sm">
+                  <Stethoscope className="w-4 h-4" />
+                  <span>1-on-1</span>
+                </div>
+                <p className="text-[11px] text-slate-500 mt-0.5">Certified dietitians</p>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-white/90 border border-slate-200/80 shadow-2xs">
+                <div className="flex items-center gap-1.5 text-sky-700 font-bold text-sm">
+                  <Clock className="w-4 h-4" />
+                  <span>&lt; 24h</span>
+                </div>
+                <p className="text-[11px] text-slate-500 mt-0.5">Care desk reachout</p>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-white/90 border border-slate-200/80 shadow-2xs">
+                <div className="flex items-center gap-1.5 text-amber-700 font-bold text-sm">
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>100%</span>
+                </div>
+                <p className="text-[11px] text-slate-500 mt-0.5">DISHA / HIPAA safe</p>
+              </div>
+            </div>
           </div>
 
-          {/* Main Hero Serif Title matching Screenshot 5 */}
-          <h1 className="text-4xl sm:text-6xl md:text-[68px] font-normal text-[#0f2027] font-serif-display tracking-tight leading-[1.12]">
-            Start Your Clinical Health &amp; <br className="hidden sm:inline" />Nutrition Journey
-          </h1>
+          {/* Right Column: Interactive Clinical Snapshot Preview */}
+          <div className="lg:col-span-5">
+            <div className="relative mx-auto max-w-md">
+              {/* Subtle ambient halo */}
+              <div 
+                aria-hidden="true" 
+                className="absolute -top-10 -right-10 w-72 h-72 bg-[#004b70]/10 rounded-full blur-3xl -z-10" 
+              />
 
-          {/* Supporting Lead Description */}
-          <p className="text-base sm:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-normal">
-            RestoreLife connects you with licensed clinical dietitians to reverse metabolic conditions, balance your biomarkers, and build sustainable eating habits through 1-on-1 personalized medical nutrition therapy.
-          </p>
+              {/* Main Card */}
+              <div className="luxury-card rounded-3xl p-6 sm:p-7 space-y-5 bg-white">
+                <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#004b70]">
+                      Verified Patient Outcome
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
+                    16-Week Review
+                  </span>
+                </div>
 
-          {/* CTA Action Button */}
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button
-              onClick={scrollToForm}
-              className="group relative inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-[#004b70] hover:bg-[#003854] text-white text-base font-semibold shadow-md shadow-[#004b70]/20 hover:shadow-lg hover:shadow-[#004b70]/30 transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer w-full sm:w-auto"
-            >
-              <span>Request Onboarding</span>
-              <ArrowRight className="w-4 h-4 text-emerald-300 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <a
-              href="#how-it-works"
-              className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-sm font-semibold transition-all hover:border-slate-300 w-full sm:w-auto shadow-2xs"
-            >
-              <span>Explore 4-Step Process</span>
-            </a>
-          </div>
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-base font-bold text-[#0a1922]">Vikramaditya S. (44y)</h3>
+                    <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">
+                      Reversed Pre-Diabetes
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-500">Supervised by Clinical Nutrition Specialist</p>
+                </div>
 
-          {/* Trust Metrics Bar */}
-          <div className="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto text-left">
-            <div className="p-4 rounded-2xl bg-white/80 border border-slate-200/80 shadow-2xs backdrop-blur-xs flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
-                <Activity className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-slate-900">94.2%</p>
-                <p className="text-[11px] text-slate-500">Biomarker shift</p>
-              </div>
-            </div>
+                {/* Primary Metric Transformations */}
+                <div className="space-y-3 pt-1">
+                  {/* HbA1c */}
+                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                    <div>
+                      <span className="text-[11px] font-semibold text-slate-500 block">Glycated Hemoglobin (HbA1c)</span>
+                      <span className="text-xs text-slate-400">Target: &lt; 5.7%</span>
+                    </div>
+                    <div className="text-right">
+                      <div className="flex items-center gap-1.5 justify-end">
+                        <span className="text-xs text-rose-500 line-through">8.4%</span>
+                        <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+                        <strong className="text-sm font-bold text-emerald-600">5.5%</strong>
+                      </div>
+                      <span className="text-[10px] font-bold text-emerald-700">Normalized (Non-diabetic)</span>
+                    </div>
+                  </div>
 
-            <div className="p-4 rounded-2xl bg-white/80 border border-slate-200/80 shadow-2xs backdrop-blur-xs flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[#e8f4f8] text-[#004b70] flex items-center justify-center shrink-0">
-                <Stethoscope className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-slate-900">1-on-1 Care</p>
-                <p className="text-[11px] text-slate-500">Certified dietitians</p>
-              </div>
-            </div>
+                  {/* Fasting Insulin */}
+                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                    <div>
+                      <span className="text-[11px] font-semibold text-slate-500 block">Fasting Insulin</span>
+                      <span className="text-xs text-slate-400">HOMA-IR Score: 4.2 ➔ 1.1</span>
+                    </div>
+                    <div className="text-right">
+                      <div className="flex items-center gap-1.5 justify-end">
+                        <span className="text-xs text-rose-500 line-through">24.8</span>
+                        <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+                        <strong className="text-sm font-bold text-emerald-600">8.2 uIU</strong>
+                      </div>
+                      <span className="text-[10px] font-bold text-emerald-700">-67% Resistance</span>
+                    </div>
+                  </div>
 
-            <div className="p-4 rounded-2xl bg-white/80 border border-slate-200/80 shadow-2xs backdrop-blur-xs flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-sky-50 text-sky-700 flex items-center justify-center shrink-0">
-                <Clock className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-slate-900">&lt; 24h Response</p>
-                <p className="text-[11px] text-slate-500">Clinical coordinator</p>
-              </div>
-            </div>
+                  {/* Weight / Visceral Fat */}
+                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                    <div>
+                      <span className="text-[11px] font-semibold text-slate-500 block">Body Composition</span>
+                      <span className="text-xs text-slate-400">Visceral Fat Level</span>
+                    </div>
+                    <div className="text-right">
+                      <div className="flex items-center gap-1.5 justify-end">
+                        <span className="text-xs text-slate-400 line-through">92.4 kg</span>
+                        <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+                        <strong className="text-sm font-bold text-slate-900">81.2 kg</strong>
+                      </div>
+                      <span className="text-[10px] font-bold text-emerald-700">-11.2 kg (Preserved Muscle)</span>
+                    </div>
+                  </div>
+                </div>
 
-            <div className="p-4 rounded-2xl bg-white/80 border border-slate-200/80 shadow-2xs backdrop-blur-xs flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center shrink-0">
-                <ShieldCheck className="w-5 h-5" />
+                {/* Bottom Card Footer */}
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span className="text-[11px] font-medium">Metformin discontinued with MD consent</span>
+                  </div>
+                  <button 
+                    onClick={() => scrollToForm('diabetes-reversal')} 
+                    className="text-[11px] font-bold text-[#004b70] hover:underline"
+                  >
+                    Start Similar Plan →
+                  </button>
+                </div>
               </div>
-              <div>
-                <p className="text-xs font-bold text-slate-900">100% Private</p>
-                <p className="text-[11px] text-slate-500">DISHA compliant</p>
+
+              {/* Floating Accents */}
+              <div className="absolute -bottom-4 -left-4 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-slate-200/80 shadow-lg flex items-center gap-2 text-xs font-semibold text-slate-800">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span>1-on-1 WhatsApp Care Desk</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. HOW BECOMING A CLIENT WORKS (Matching Screenshot 4) */}
-      <section id="how-it-works" className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12">
+      {/* 2. CLINICAL SPECIALTIES & CONDITIONS WE TREAT (New Core Section) */}
+      <section id="specialties" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div className="text-center max-w-3xl mx-auto space-y-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#e8f4f8] text-[#004b70] text-xs font-semibold">
+            <Layers className="w-3.5 h-3.5" />
+            <span>Targeted Care Protocols</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal text-[#0a1922] font-serif-display tracking-tight">
+            Specialized Conditions We Treat
+          </h2>
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+            Every metabolic condition requires a distinct biological approach. Our dietitians craft protocols around your exact lab biomarkers and hormonal pathways.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {CLINICAL_CONDITIONS.map((cond: ClinicalCondition) => (
+            <div 
+              key={cond.id} 
+              className="luxury-card rounded-3xl p-7 space-y-6 flex flex-col justify-between group cursor-pointer"
+              onClick={() => scrollToForm(
+                cond.id === 'diabetes' ? 'diabetes-reversal' :
+                cond.id === 'pcos' ? 'pcos-pcod' :
+                cond.id === 'fatty-liver' ? 'fatty-liver-lipids' :
+                cond.id === 'gut-health' ? 'gut-health' :
+                cond.id === 'thyroid' ? 'thyroid-autoimmune' : 'athletic-longevity'
+              )}
+            >
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-[#e8f4f8] text-[#004b70]">
+                    {cond.badge}
+                  </span>
+                  <ArrowUpRight className="w-4 h-4 text-slate-300 group-hover:text-[#004b70] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="font-bold text-xl text-[#0a1922] font-serif-display group-hover:text-[#004b70] transition-colors">
+                    {cond.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    {cond.tagline}
+                  </p>
+                </div>
+
+                <div className="space-y-1.5 pt-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                    Target Biomarkers
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {cond.biomarkers.map((b: string, idx: number) => (
+                      <span key={idx} className="text-[11px] font-medium px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700">
+                        {b}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#004b70]">
+                <span>Start Intake for this Goal</span>
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 3. HOW BECOMING A CLIENT WORKS (Connected Roadmap matching Screenshot 4) */}
+      <section id="how-it-works" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         <div className="text-center max-w-2xl mx-auto space-y-3">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal text-[#0f2027] font-serif-display tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal text-[#0a1922] font-serif-display tracking-tight">
             How Becoming a Client Works
           </h2>
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
@@ -215,9 +399,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateSupport }) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
           {/* Step 1 */}
-          <div className="luxury-card rounded-3xl p-8 space-y-6 flex flex-col justify-between">
+          <div className="luxury-card rounded-3xl p-8 space-y-6 flex flex-col justify-between relative">
             <div className="space-y-5">
               <div className="flex items-center justify-between">
                 <div className="w-14 h-14 rounded-2xl bg-[#e8f4f8] text-[#004b70] flex items-center justify-center shadow-2xs">
@@ -228,14 +412,15 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateSupport }) => {
                 </span>
               </div>
               <div className="space-y-2">
-                <h3 className="font-bold text-lg text-[#0f2027]">1. Request Onboarding</h3>
+                <h3 className="font-bold text-lg text-[#0a1922]">1. Request Onboarding</h3>
                 <p className="text-sm text-slate-500 leading-relaxed">
                   Submit your contact details and primary health goals via the form below.
                 </p>
               </div>
             </div>
-            <div className="pt-4 border-t border-slate-100 flex items-center text-xs text-[#004b70] font-semibold">
+            <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-[#004b70] font-semibold">
               <span>Quick 2-minute form</span>
+              <span className="text-slate-400 font-normal">Free intake</span>
             </div>
           </div>
 
@@ -251,14 +436,15 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateSupport }) => {
                 </span>
               </div>
               <div className="space-y-2">
-                <h3 className="font-bold text-lg text-[#0f2027]">2. Account Creation</h3>
+                <h3 className="font-bold text-lg text-[#0a1922]">2. Account Creation</h3>
                 <p className="text-sm text-slate-500 leading-relaxed">
                   Our clinical care coordinator contacts you within 24 hours to create your account and issue your intake assessment.
                 </p>
               </div>
             </div>
-            <div className="pt-4 border-t border-slate-100 flex items-center text-xs text-[#004b70] font-semibold">
-              <span>Coordinated within 24h</span>
+            <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-[#004b70] font-semibold">
+              <span>Within 24 Hours</span>
+              <span className="text-slate-400 font-normal">Care Desk Lead</span>
             </div>
           </div>
 
@@ -274,14 +460,15 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateSupport }) => {
                 </span>
               </div>
               <div className="space-y-2">
-                <h3 className="font-bold text-lg text-[#0f2027]">3. 1-on-1 Consultation</h3>
+                <h3 className="font-bold text-lg text-[#0a1922]">3. 1-on-1 Consultation</h3>
                 <p className="text-sm text-slate-500 leading-relaxed">
                   Meet with your certified dietitian to review blood biomarkers, metabolic history, and target health parameters.
                 </p>
               </div>
             </div>
-            <div className="pt-4 border-t border-slate-100 flex items-center text-xs text-[#004b70] font-semibold">
-              <span>Doctor &amp; Dietitian led</span>
+            <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-[#004b70] font-semibold">
+              <span>60-Min Deep Dive</span>
+              <span className="text-slate-400 font-normal">Clinical Dietitian</span>
             </div>
           </div>
 
@@ -297,28 +484,110 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateSupport }) => {
                 </span>
               </div>
               <div className="space-y-2">
-                <h3 className="font-bold text-lg text-[#0f2027]">4. Active Mobile Care</h3>
+                <h3 className="font-bold text-lg text-[#0a1922]">4. Active Mobile Care</h3>
                 <p className="text-sm text-slate-500 leading-relaxed">
                   Sign in to the RestoreLife app to access your customized meal plans, healthy recipes, tracking, and ongoing coaching.
                 </p>
               </div>
             </div>
-            <div className="pt-4 border-t border-slate-100 flex items-center text-xs text-[#004b70] font-semibold">
-              <span>Personalized app suite</span>
+            <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-[#004b70] font-semibold">
+              <span>Continuous Daily Care</span>
+              <span className="text-slate-400 font-normal">Mobile Portal</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 3. REQUEST CLIENT ONBOARDING FORM (Matching Screenshot 2) */}
-      <section id="onboarding-form" className="max-w-2xl mx-auto px-4 sm:px-6">
-        <div className="luxury-card rounded-3xl p-8 sm:p-12 space-y-8 relative overflow-hidden">
+      {/* 4. REAL LAB OUTCOMES & BIOMARKER EVIDENCE */}
+      <section id="results" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="space-y-3 max-w-2xl">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold">
+              <Award className="w-3.5 h-3.5" />
+              <span>Evidence-Based Practice</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal text-[#0a1922] font-serif-display tracking-tight">
+              Real Lab Outcomes. Restored Vitality.
+            </h2>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+              Documented biomarker shifts under personalized 1-on-1 medical nutrition therapy.
+            </p>
+          </div>
+
+          {/* Category Filter Pills */}
+          <div className="flex flex-wrap gap-2">
+            {[
+              { id: 'all', label: 'All Outcomes' },
+              { id: 'diabetes', label: 'Diabetes & Glucose' },
+              { id: 'pcos', label: 'PCOS & Hormones' },
+              { id: 'liver', label: 'Liver & Lipids' },
+            ].map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveResultCategory(cat.id)}
+                className={`px-4 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                  activeResultCategory === cat.id
+                    ? 'bg-[#004b70] text-white shadow-xs'
+                    : 'bg-white border border-slate-200 text-slate-600 hover:border-slate-300'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {filteredResults.map((res, i) => (
+            <div key={i} className="luxury-card rounded-3xl p-7 space-y-5 flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-[#004b70]">{res.name} ({res.age}y)</span>
+                  <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#e8f4f8] text-[#004b70]">
+                    {res.duration}
+                  </span>
+                </div>
+
+                <div className="space-y-1">
+                  <p className="text-xs font-bold text-slate-800">{res.condition}</p>
+                  <p className="text-[11px] text-slate-400">{res.city}</p>
+                </div>
+
+                <p className="text-xs sm:text-sm text-slate-600 italic leading-relaxed">
+                  "{res.quote}"
+                </p>
+              </div>
+
+              {/* Lab Biomarker Chips */}
+              <div className="pt-4 border-t border-slate-100 space-y-2">
+                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between text-xs">
+                  <span className="text-[10px] uppercase font-bold text-slate-400">Primary Marker</span>
+                  <div className="flex items-center gap-1.5 font-bold">
+                    <span className="text-slate-400 line-through text-[11px]">{res.hba1c.before}</span>
+                    <span className="text-emerald-700 text-xs">{res.hba1c.after}</span>
+                  </div>
+                </div>
+
+                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between text-xs">
+                  <span className="text-[10px] uppercase font-bold text-slate-400">Shift</span>
+                  <strong className="text-slate-900 font-bold text-xs">{res.weight.after}</strong>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 5. REQUEST CLIENT ONBOARDING FORM (Matching Screenshot 2) */}
+      <section id="onboarding-form" className="max-w-3xl mx-auto px-4 sm:px-6">
+        <div className="luxury-card rounded-3xl p-8 sm:p-12 space-y-8 relative overflow-hidden bg-white">
           {/* Header */}
           <div className="text-center space-y-3">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#e8f4f8] text-[#004b70] text-xs font-semibold">
-              <Lock className="w-3.5 h-3.5" /> Confidential Intake
+              <Lock className="w-3.5 h-3.5" />
+              <span>Confidential Intake Protocol</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-normal text-[#0f2027] font-serif-display">
+            <h2 className="text-3xl sm:text-4xl font-normal text-[#0a1922] font-serif-display">
               Request Client Onboarding
             </h2>
             <p className="text-sm text-slate-500 max-w-lg mx-auto leading-relaxed">
@@ -385,13 +654,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateSupport }) => {
               {errors.email && <p className="text-xs text-rose-500">{errors.email}</p>}
             </div>
 
-            {/* Phone Number with Indian Flag Pill matching Screenshot 2 */}
+            {/* Phone Number with Indian Flag Selector matching Screenshot 2 */}
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-700">
                 Phone Number <span className="text-rose-500">*</span>
               </label>
               <div className="flex gap-2">
-                <div className="flex items-center gap-1.5 px-3 py-3 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-medium text-slate-700 shrink-0 select-none">
+                <div className="flex items-center gap-1.5 px-3.5 py-3 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-medium text-slate-700 shrink-0 select-none">
                   <span className="text-base">🇮🇳</span>
                   <span>+91</span>
                 </div>
@@ -479,72 +748,30 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateSupport }) => {
                 disabled={isSubmitting}
                 className="w-full py-4 rounded-full bg-[#004b70] hover:bg-[#003854] text-white text-sm font-semibold shadow-md shadow-[#004b70]/20 hover:shadow-lg transition-all duration-200 hover:scale-[1.01] active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70"
               >
-                <span>{isSubmitting ? 'Transmitting request...' : 'Submit Onboarding Request'}</span>
+                <span>{isSubmitting ? 'Transmitting intake data...' : 'Submit Onboarding Request'}</span>
                 <ArrowRight className="w-4 h-4 text-emerald-300" />
               </button>
 
-              <p className="text-[11px] text-slate-400 text-center leading-relaxed">
-                By submitting, your data is processed securely under clinical privacy protocols. A care coordinator will connect with you within 24 hours.
-              </p>
+              <div className="pt-2 flex flex-wrap items-center justify-center gap-4 text-[11px] text-slate-400">
+                <span className="flex items-center gap-1">
+                  <Check className="w-3.5 h-3.5 text-emerald-600" /> No spam guaranteed
+                </span>
+                <span>•</span>
+                <span className="flex items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> 100% Confidential Care
+                </span>
+                <span>•</span>
+                <span>Response within 24h</span>
+              </div>
             </div>
           </form>
         </div>
       </section>
 
-      {/* 4. REAL DOCUMENTED BIOMARKER OUTCOMES */}
-      <section id="results" className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10">
-        <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold">
-            <Award className="w-3.5 h-3.5" /> Clinical Evidence
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-normal text-[#0f2027] font-serif-display">
-            Real Lab Outcomes. Restored Vitality.
-          </h2>
-          <p className="text-sm text-slate-500 leading-relaxed">
-            Documented biomarker shifts under personalized 1-on-1 medical nutrition therapy.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {CLIENT_RESULTS.map((res, i) => (
-            <div key={i} className="luxury-card rounded-3xl p-7 space-y-5 flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-[#004b70]">{res.name} ({res.age}y)</span>
-                  <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#e8f4f8] text-[#004b70]">
-                    {res.duration}
-                  </span>
-                </div>
-                <p className="text-xs font-semibold text-slate-700">{res.condition}</p>
-                <p className="text-xs sm:text-sm text-slate-600 italic leading-relaxed">
-                  "{res.quote}"
-                </p>
-              </div>
-
-              <div className="pt-4 border-t border-slate-100 grid grid-cols-2 gap-3 text-xs">
-                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">Biomarker</span>
-                  <div className="flex items-baseline gap-1.5 mt-1">
-                    <strong className="text-emerald-700 font-bold text-sm">{res.hba1c.after}</strong>
-                    <span className="text-xs text-slate-400 line-through">{res.hba1c.before}</span>
-                  </div>
-                </div>
-                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">Metric Shift</span>
-                  <div className="flex items-baseline gap-1.5 mt-1">
-                    <strong className="text-slate-900 font-bold text-sm">{res.weight.after}</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 5. FREQUENTLY ASKED QUESTIONS (Matching Screenshot 3) */}
+      {/* 6. FREQUENTLY ASKED QUESTIONS (Matching Screenshot 3) */}
       <section id="faq" className="max-w-4xl mx-auto px-4 sm:px-6 space-y-8">
         <div className="text-center space-y-3">
-          <h2 className="text-3xl sm:text-4xl font-normal text-[#0f2027] font-serif-display">
+          <h2 className="text-3xl sm:text-4xl font-normal text-[#0a1922] font-serif-display">
             Frequently Asked Questions
           </h2>
           <p className="text-sm text-slate-500">
@@ -558,7 +785,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateSupport }) => {
             return (
               <div
                 key={idx}
-                className="luxury-card rounded-2xl overflow-hidden transition-all"
+                className="luxury-card rounded-2xl overflow-hidden transition-all bg-white"
               >
                 <button
                   type="button"
@@ -624,7 +851,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateSupport }) => {
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#e8f4f8] text-[#004b70] shadow-2xs">
                 <CheckCircle2 className="h-9 w-9 text-[#004b70]" />
               </div>
-              <h3 className="font-serif-display font-normal text-2xl text-[#0f2027]">
+              <h3 className="font-serif-display font-normal text-2xl text-[#0a1922]">
                 Onboarding Request Received
               </h3>
               <p className="text-sm text-slate-500 leading-relaxed pt-1">

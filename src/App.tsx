@@ -16,12 +16,12 @@ export function App() {
   };
 
   return (
-    <div className="app-shell min-h-screen flex flex-col text-[#0f2027] font-sans antialiased selection:bg-[#004b70]/15 selection:text-[#004b70]">
+    <div className="app-shell min-h-screen flex flex-col text-[#0a1922] font-sans antialiased selection:bg-[#004b70]/15 selection:text-[#004b70]">
       {/* Header Navigation */}
       <Navbar currentPage={currentPage} onNavigate={handleNavigate} />
 
       {/* Main Content */}
-      <main className="flex-1">
+      <main id="main" className="flex-1">
         {currentPage === 'home' && <HomePage onNavigateSupport={() => handleNavigate('support')} />}
         {currentPage === 'support' && <SupportPage onNavigate={handleNavigate} />}
         {currentPage === 'terms' && <TermsPage onNavigate={handleNavigate} />}
