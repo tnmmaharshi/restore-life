@@ -10,11 +10,7 @@ import {
   MessageSquare, 
   ShieldCheck, 
   Clock, 
-  FileText, 
-  UserCheck, 
   Sparkles,
-  AlertCircle,
-  HelpCircle,
   X
 } from 'lucide-react';
 
@@ -79,7 +75,7 @@ export const GetStartedPage: React.FC<GetStartedPageProps> = ({ onNavigate, pref
     }, 800);
   };
 
-  const handleReset = () => {
+  const _handleReset = () => {
     setIsSubmitted(false);
     setFormData({
       firstName: '',

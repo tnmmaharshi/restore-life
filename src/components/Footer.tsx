@@ -3,7 +3,6 @@ import { NavigationPage } from '../types';
 import { 
   HeartPulse, 
   Mail, 
-  Phone, 
   Clock, 
   ShieldCheck, 
   ArrowUpRight, 

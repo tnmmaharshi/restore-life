@@ -5,13 +5,9 @@ import {
   UtensilsCrossed, 
   Search, 
   Clock, 
-  Flame, 
-  Heart, 
-  Sparkles, 
   CheckCircle2, 
   X, 
-  ArrowRight,
-  Filter
+  ArrowRight
 } from 'lucide-react';
 
 interface RecipesPageProps {

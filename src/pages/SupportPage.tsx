@@ -2,17 +2,11 @@ import React, { useState } from 'react';
 import { NavigationPage } from '../types';
 import { 
   Mail, 
-  Phone, 
   Clock, 
   ShieldCheck, 
-  MessageSquare, 
   Send, 
   CheckCircle2, 
-  HelpCircle, 
-  Sparkles,
   Copy,
-  ChevronDown,
-  ChevronUp,
   FileQuestion,
   Headphones
 } from 'lucide-react';

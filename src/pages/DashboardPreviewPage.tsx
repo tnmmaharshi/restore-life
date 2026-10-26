@@ -1,29 +1,18 @@
 import React, { useState } from 'react';
 import { NavigationPage } from '../types';
 import { 
-  Activity, 
-  Clock, 
-  CreditCard, 
-  TrendingUp, 
   Video, 
-  Users, 
   Calendar, 
   CheckCircle2, 
   Droplet, 
-  Flame, 
-  Apple, 
-  ArrowUpRight, 
-  ExternalLink,
-  ChevronRight,
-  ShieldCheck,
-  Dumbbell
+  Apple
 } from 'lucide-react';
 
 interface DashboardPreviewPageProps {
-  onNavigate: (page: NavigationPage) => void;
+  onNavigate?: (page: NavigationPage) => void;
 }
 
-export const DashboardPreviewPage: React.FC<DashboardPreviewPageProps> = ({ onNavigate }) => {
+export const DashboardPreviewPage: React.FC<DashboardPreviewPageProps> = () => {
   const [activeTab, setActiveTab] = useState<'client' | 'practitioner'>('client');
   const [waterCups, setWaterCups] = useState(6); // 6 x 250ml = 1.5L
   const [mealChecked, setMealChecked] = useState<Record<string, boolean>>({

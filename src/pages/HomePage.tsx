@@ -10,25 +10,16 @@ import {
   WORKOUTS 
 } from '../data/mockData';
 import { 
-  HeartPulse, 
   Sparkles, 
   ArrowRight, 
   CheckCircle2, 
-  Flame, 
   Dumbbell, 
-  Activity, 
   ShieldCheck, 
   TrendingDown, 
-  TrendingUp, 
   ChevronDown, 
   ChevronUp, 
   Clock, 
-  Award, 
   Apple, 
-  MessageSquare, 
-  Play, 
-  Zap, 
-  Users,
   Stethoscope,
   Star
 } from 'lucide-react';

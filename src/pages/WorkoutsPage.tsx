@@ -7,13 +7,8 @@ import {
   Clock, 
   HeartPulse, 
   CheckCircle2, 
-  Sparkles, 
-  Play, 
-  RotateCcw, 
   ShieldCheck, 
-  ArrowRight,
-  Activity,
-  Zap
+  ArrowRight
 } from 'lucide-react';
 
 interface WorkoutsPageProps {

@@ -2,12 +2,8 @@ import React from 'react';
 import { NavigationPage } from '../types';
 import { 
   FileText, 
-  ShieldAlert, 
-  CheckCircle2, 
   ArrowLeft, 
   Clock, 
-  Building,
-  Mail,
   AlertTriangle
 } from 'lucide-react';
 

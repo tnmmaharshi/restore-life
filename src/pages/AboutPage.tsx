@@ -2,13 +2,8 @@ import React from 'react';
 import { NavigationPage } from '../types';
 import { CLINICAL_TEAM } from '../data/mockData';
 import { 
-  ShieldCheck, 
   HeartPulse, 
   Activity, 
-  Award, 
-  Sparkles, 
-  CheckCircle2, 
-  ArrowRight,
   FlaskConical,
   Microscope,
   Stethoscope,

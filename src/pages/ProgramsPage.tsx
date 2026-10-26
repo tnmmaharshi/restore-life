@@ -7,10 +7,6 @@ import {
   Clock, 
   Dumbbell, 
   ShieldCheck, 
-  Sparkles, 
-  Activity, 
-  Flame, 
-  Apple, 
   HeartPulse 
 } from 'lucide-react';
 

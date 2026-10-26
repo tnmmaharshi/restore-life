@@ -6,9 +6,7 @@ import {
   Database, 
   UserCheck, 
   ArrowLeft, 
-  Clock, 
-  Mail, 
-  AlertCircle 
+  Clock 
 } from 'lucide-react';
 
 interface PrivacyPageProps {
